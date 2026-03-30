@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Enum\Section;
+use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\CmsContent;
 use App\Models\CmsContentItem;
@@ -252,10 +253,13 @@ class CmsContentService
                 return Brand::query()->active()->get(['name', 'logo', 'website_url']);
 
             case Section::TESTIMONIALS_SECTION->value:
-                return Testimonial::query()->active()->latest()->get();
+                return Testimonial::query()->active()->latest()->limit(10)->get();
 
             case Section::TEAM_SECTION->value:
                 return TeamMember::query()->latest()->get();
+                
+            case Section::BLOG_SECTION->value:
+                return Blog::query()->active()->latest()->limit(3)->get(['id', 'title', 'short_description', 'image']);
 
         }
 
