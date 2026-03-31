@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Web\Backend\Blog\BlogController;
 use App\Http\Controllers\Web\Backend\Brand\BrandController;
 use App\Http\Controllers\Web\Backend\Dashboard\DashboardController;
 use App\Http\Controllers\Web\Backend\Team\TeamMemberController;
@@ -32,3 +34,8 @@ Route::prefix('brands')->name('admin.brands.')->group(function () {
 
 Route::resource('/testimonials', TestimonialController::class)->names('admin.testimonials');
 Route::patch('/testimonials/{id}/status', [TestimonialController::class, 'status'])->name('admin.testimonials.status');
+
+Route::prefix('blogs')->name('admin.blogs.')->group(function () {
+    Route::resource('/', BlogController::class)->parameter('', 'blog');
+    Route::patch('/status/{blog}', [BlogController::class, 'status'])->name('status');
+});

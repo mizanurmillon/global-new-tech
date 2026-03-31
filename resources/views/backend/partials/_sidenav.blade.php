@@ -60,6 +60,17 @@
             </a>
         </li>
 
+        <li class="">
+            <a href="/admin/blogs" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <i class="fas fa-blog"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Blogs</span>
+                </div>
+            </a>
+        </li>
+
 
         {{-- <li class="">
             <a href="/admin/users" aria-expanded="false" class="active">

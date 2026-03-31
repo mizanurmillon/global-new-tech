@@ -45,9 +45,7 @@
 
                     <div class="col-12 mb-3">
                         <label>Description</label>
-                        <textarea id="summernote" name="description" class="form-control">
-                        {{ old('description', $brand->description ?? '') }}
-                    </textarea>
+                        <textarea id="summernote" name="description" class="form-control">{{ old('description', $brand->description ?? '') }}</textarea>
                     </div>
 
                 </div>
