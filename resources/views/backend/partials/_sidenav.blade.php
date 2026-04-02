@@ -71,6 +71,29 @@
             </a>
         </li>
 
+         <li class="">
+            <a href="/admin/compr-services" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Comp Services</span>
+                </div>
+            </a>
+        </li>
+
+         <li class="">
+            <a href="/admin/compr-services" aria-expanded="false">
+                <div class="nav_icon_small">
+                   <i class="fa-brands fa-whmcs"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Core Services</span>
+                </div>
+            </a>
+        </li>
+
+
 
         {{-- <li class="">
             <a href="/admin/users" aria-expanded="false" class="active">

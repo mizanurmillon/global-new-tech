@@ -39,3 +39,5 @@ Route::prefix('blogs')->name('admin.blogs.')->group(function () {
     Route::resource('/', BlogController::class)->parameter('', 'blog');
     Route::patch('/status/{blog}', [BlogController::class, 'status'])->name('status');
 });
+
+

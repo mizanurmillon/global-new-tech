@@ -2,8 +2,6 @@
 
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\CheckUserEnabled;
-use App\Http\Middleware\Recruiter;
-use App\Http\Middleware\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -21,6 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('routes/mizan_api.php'));
+
             Route::middleware(['web', 'auth', 'admin'])
                 ->prefix('admin')
                 ->group(base_path('routes/backend.php'));
@@ -28,6 +30,10 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware(['web', 'auth', 'admin'])
                 ->prefix('admin')
                 ->group(base_path('routes/admin_setting.php'));
+
+            Route::middleware(['web', 'auth', 'admin'])
+                ->prefix('admin')
+                ->group(base_path('routes/mizan_backend.php'));
 
             Route::middleware(['web'])
                 ->group(base_path('routes/frontend.php'));
