@@ -1,692 +1,461 @@
+I will give you my exising file for another module, based on these i want to complete blog module, 
 
-C:\Users\Rahatul\Herd\christophlombar\routes\backend.php
-//projects module 
-Route::name('admin.')->group(function () {
-    Route::resource('projects',ProjectController::class);
+I have as=>
+
+Route::prefix('brands')->name('admin.brands.')->group(function () {
+    Route::resource('/', BrandController::class)->parameter('', 'brand');
+    Route::patch('/status/{brand}', [BrandController::class, 'status'])->name('status');
 });
 
 
-==============
-
-C:\Users\Rahatul\Herd\christophlombar\app\Http\Controllers\Web\Backend\Projects\ProjectController.php
-
 <?php
-namespace App\Http\Controllers\Web\Backend\Projects;
+namespace App\Http\Controllers\Web\Backend\Brand;
 
 use App\Http\Controllers\Controller;
-use App\Models\Project;
-use App\Models\ServiceArea;
+use App\Http\Requests\Brand\BrandRequest;
+use App\Models\Brand;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
-class ProjectController extends Controller
+class BrandController extends Controller
 {
-    // Project List / DataTable
-
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Project::with('serviceAreas')->latest()->get();
+            $data = Brand::latest();
 
-            return DataTables::of($query)
+            return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('title', fn($project) => $project->title)
-                ->addColumn('description', fn($project) => $project->description)
-                ->addColumn('image', function ($project) {
-                    return $project->image
-                        ? '<img src="' . asset($project->image) . '" style="width:50px;height:50px;object-fit:cover;">'
-                        : '-';
+
+                ->addColumn('logo', function ($row) {
+                    if ($row->logo && file_exists(public_path($row->logo))) {
+                        return '<img src="' . asset($row->logo) . '" height="50" width="50" style="border-radius:50%">';
+                    }
+                    return '<span class="text-muted">No Logo</span>';
                 })
-                ->addColumn('action', function (Project $data) {
+                ->addColumn('is_active', function ($row) {
+                    $next    = $row->is_active ? 0 : 1;
+                    $checked = $row->is_active ? 'checked' : '';
+                    return '
+                        <a href="#" class="change_status"
+                            data-id="' . $row->id . '"
+                            data-enabled="' . $next . '"
+                            data-title="Do you want to ' . ($next ? 'Enable' : 'Disable') . ' this Brand?"
+                            data-description="' . ($next ? 'This content will be visible.' : 'This content will be hidden.') . '"
+                            data-bs-toggle="modal"
+                            data-bs-target="#statusModal">
+                            <label class="switch">
+                                <input type="checkbox" ' . $checked . '>
+                                <span class="slider round"></span>
+                            </label>
+                        </a>';
+                })
+
+                ->addColumn('action', function (Brand $brand) {
                     return view('components.action-buttons', [
-                        'id'     => $data->id,
-                        'show'   => 'admin.projects.show',
-                        'edit'   => 'admin.projects.edit',
+                        'id'     => $brand->id,
+                        'show'   => 'admin.brands.show',
+                        'edit'   => 'admin.brands.edit',
                         'delete' => true,
                     ])->render();
                 })
-                ->rawColumns(['image', 'action'])
+
+                ->rawColumns(['logo', 'is_active', 'action'])
                 ->make(true);
         }
 
-        return view('backend.layouts.projects.index');
+        return view('backend.layouts.brand.index');
     }
 
-    // Create Project Form
     public function create()
     {
-        $serviceAreas = ServiceArea::all();
-        return view('backend.layouts.projects.create', compact('serviceAreas'));
+        return view('backend.layouts.brand.create');
     }
 
-    // Store New Project
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
-        $validated = $request->validate([
-            'title'           => 'required|string|max:255',
-            'description'     => 'nullable|string',
-            'image'           => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20480',
-            'services_area'   => 'required|array|min:1',
-            'services_area.*' => 'exists:service_area,id',
+        $data              = $request->validated();
+        $data['is_active'] = $request->has('is_active');
+
+        if ($request->hasFile('logo')) {
+            $data['logo'] = uploadFile($request->file('logo'), 'uploads/brands');
+        }
+
+        Brand::create($data);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully.');
+    }
+
+    public function edit(Brand $brand)
+    {
+        return view('backend.layouts.brand.create', compact('brand'));
+    }
+
+    public function update(BrandRequest $request, Brand $brand)
+    {
+        $data              = $request->validated();
+        $data['is_active'] = $request->has('is_active');
+
+        if ($request->hasFile('logo')) {
+            deleteFile($brand->logo);
+            $data['logo'] = uploadFile($request->file('logo'), 'uploads/brands');
+        }
+
+        $brand->update($data);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully.');
+    }
+
+    public function show(Brand $brand)
+    {
+        return view('backend.layouts.brand.show', compact('brand'));
+    }
+
+    public function status(Brand $brand)
+    {
+        $brand->is_active = ! $brand->is_active;
+        $brand->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $brand->is_active ? 'Activated successfully' : 'Deactivated successfully',
         ]);
-
-        $serviceAreas = $validated['services_area'];
-        unset($validated['services_area']);
-
-        // Upload image
-        if ($request->hasFile('image')) {
-            $validated['image'] = uploadFile($request->file('image'), 'uploads/projects');
-        }
-
-        $project = Project::create($validated);
-
-        // Attach services
-        $project->serviceAreas()->sync($serviceAreas);
-
-        return redirect()->route('admin.projects.index')->with('success', 'Project created successfully.');
     }
 
-    // Show Project
-    public function show(Project $project)
+    public function destroy(Brand $brand)
     {
-        $project->load('serviceAreas');
-        return view('backend.layouts.projects.show', compact('project'));
-    }
+        deleteFile($brand->logo);
+        $brand->delete();
 
-    // Edit Project Form
-    public function edit(Project $project)
-    {
-        $project->load('serviceAreas');
-        $serviceAreas = ServiceArea::all();
-
-        return view('backend.layouts.projects.edit', compact('project', 'serviceAreas'));
-    }
-
-    // Update Project
-    public function update(Request $request, Project $project)
-    {
-        // Validation
-        $request->validate([
-            'title'           => 'required|string|max:255',
-            'description'     => 'nullable|string',
-            'services_area'   => 'nullable|array',
-            'services_area.*' => 'exists:service_area,id',
-            'image'           => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        return response()->json([
+            'success' => true,
+            'message' => 'Deleted successfully',
         ]);
-
-        // Update basic fields
-        $project->title       = $request->title;
-        $project->description = $request->description;
-
-        // Update image if uploaded
-        if ($request->hasFile('image')) {
-            deleteFile($project->image);
-            $project->image = uploadFile($request->file('image'), 'uploads/projects');
-        }
-
-        $project->save();
-
-        // Sync services areas
-        if ($request->has('services_area')) {
-            $project->serviceAreas()->sync($request->services_area);
-        } else {
-            $project->serviceAreas()->sync([]);
-        }
-
-        return redirect()
-            ->route('admin.projects.index')
-            ->with('success', 'Project updated successfully!');
-    }
-
-    // Delete Project
-    public function destroy(Project $project)
-    {
-        if ($project->image) {
-            deleteFile($project->image);
-        }
-
-        $project->serviceAreas()->sync([]);
-        $project->delete();
-
-        return response()->json(['message' => 'Project deleted successfully.']);
     }
 }
 
-
-
-========================
-C:\Users\Rahatul\Herd\christophlombar\resources\views\backend\layouts\projects\index.blade.php
+---------
 
 @extends('backend.layouts.app')
-@section('title', ' || Projects')
+@section('title', 'Brands')
 
 @section('content')
     <div class="content-wrapper">
-        <x-breadcrumbs title="Projects" :breadcrumbs="[['text' => 'Projects', 'url' => route('admin.projects.index')]]" />
+        <x-breadcrumbs title="Brands" subtitle="Manage all brands" />
 
-        <div class="row">
-            <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <x-table-header title="Projects List" :route="route('admin.projects.create')" />
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped" id="projects-table">
-                                <thead>
-                                    <tr>
-                                        <th>S/L</th>
-                                        <th>Image</th>
-                                        <th>Title</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+        <div class="card">
+            <div class="card-body">
+                <x-table-header title="Brands" :route="route('admin.brands.create')" />
+
+                <div class="table-responsive">
+                    <table class="table table-hover" id="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Logo</th>
+                                <th>Website</th>
+                                <th>Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-@section('modal')
-   
-@endsection
-
+@section('modal') <x-status-modal /> @endsection
 @section('script')
-    @include('backend.layouts.projects.partials._projectsJS')
-@endsection
+    <script>
+        $(function() {
+            let dt = $('#data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.brands.index') }}",
 
-
-
-
-
-
-===============
-C:\Users\Rahatul\Herd\christophlombar\resources\views\backend\layouts\projects\create.blade.php
-
-@extends('backend.layouts.app')
-
-@section('title', 'Projects || Admin')
-
-@push('style')
-    <!-- For Multiple Select -->
-    <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.css') }}">
-@endpush
-
-@section('content')
-    <div class="main-content">
-        <div class="page-content">
-            <div class="container-fluid">
-
-                <div class="toolbar" id="kt_toolbar">
-                    <div class="container-fluid d-flex flex-stack">
-                        <div class="d-flex flex-column">
-                            <h1 class="fw-bold fs-2">Add New Project</h1>
-
-                            <ul class="breadcrumb fw-semibold fs-base">
-                                <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{{ url('admin/projects') }}">Projects</a></li>
-                                <li class="breadcrumb-item text-muted">Create</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <section>
-                    <div class="container-fluid">
-                        <div class="card card-body shadow-lg p-4">
-                            <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">Title</label>
-                                        <input type="text" name="title" id="title" class="form-control" required>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">Choice Service Area</label>
-
-                                        <select class="form-control js-example-basic-multiple" name="services_area[]"
-                                            multiple>
-                                            @foreach ($serviceAreas as $service)
-                                                <option value="{{ $service->id }}">{{ $service->area }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label fw-bold">Description</label>
-                                        <textarea name="description" class="form-control" placeholder="Enter your content here..." rows="6"></textarea>
-                                    </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label fw-bold">Featured Image</label>
-                                        <input type="file" name="image" class="dropify">
-                                    </div>
-                                </div>
-                                <div class="mt-4 float-end">
-                                    <a href="{{ route('admin.projects.index') }}"
-                                        class="btn btn-secondary btn-md me-2">Back</a>
-                                    <button type="submit" class="btn btn-primary btn-md">Save</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
-        </div>
-
-    </div>
-@endsection
-
-
-{{-- REQUIRED JS ONLY --}}
-@push('script')
-    <!-- For Multiple Select -->
-    <script src="{{ asset('backend/assets/vendors/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/js/select2.js') }}"></script>
-@endpush
-
-
-
-===============================
-C:\Users\Rahatul\Herd\christophlombar\resources\views\backend\layouts\projects\partials\_projectsJS.blade.php
-
-<script>
-    $(document).ready(function () {
-        var dt = $('#projects-table').DataTable({
-            processing: true,
-            serverSide: true,
-            stateSave: true,
-            ajax: "{{ route('admin.projects.index') }}",
-            order: [[1, 'desc']],
-            language: {
-                paginate: {
-                    previous: '<i class="fas fa-angle-left"></i>',
-                    next: '<i class="fas fa-angle-right"></i>'
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'logo',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'website_url',
+                        name: 'website_url'
+                    },
+                    {
+                        data: 'is_active',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                language: {
+                    paginate: {
+                        previous: '<i class="fas fa-angle-left"></i>',
+                        next: '<i class="fas fa-angle-right"></i>'
+                    },
+                    processing: dataTableLoader()
                 },
-                processing: dataTableLoader()
-            },
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                { data: 'image', name: 'image', orderable: false, searchable: false },
-                { data: 'title', name: 'title' },
-                { data: 'action', name: 'action', orderable: false, searchable: false },
-            ]
-        });
+            });
 
-        // Delete
-        $(document).on('click', '.deletebtn', function () {
-            $('#delete_id').val($(this).data('id'));
-            $('#deletemodal').modal('show');
-        });
+            // Account status toggle
+            $(document).on('click', '.change_status', function(e) {
+                e.preventDefault();
+                $('#status_id').val($(this).data('id'));
+                $('#status_enabled').val($(this).data('enabled'));
+                $('#status_title').text($(this).data('title'));
+                $('#status_description').text($(this).data('description'));
+            });
 
-        $('#delete_modal_clear').submit(function (e) {
-            e.preventDefault();
-            var id = $('#delete_id').val();
+            $('#status_form').on('submit', function(e) {
+                e.preventDefault();
+                const id = $('#status_id').val();
+                const isEnabled = $('#status_enabled').val();
+                $.ajax({
+                    url: '{{ route('admin.brands.status', ':id') }}'.replace(':id', id),
+                    type: 'PATCH',
+                    data: {
+                        is_active: isEnabled
+                    },
+                    success: function(res) {
+                        dt.ajax.reload(null, false);
+                        successModal('SUCCESSFULLY UPDATED');
+                    },
+                    error: function(xhr) {
+                        errorModal();
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
 
-            $.ajax({
-                url: '/admin/projects/' + id,
-                type: 'DELETE',
-                data: { _token: '{{ csrf_token() }}' },
-                success: function (res) {
-                    $('#deletemodal').modal('hide');
-                    dt.ajax.reload(null, false);
-                    successModal(res.message);
-                },
-                error: function () {
-                    errorModal();
-                }
+            // Delete brand
+            $(document).on('click', '.deletebtn', function(e) {
+                e.preventDefault();
+                $('#delete_id').val($(this).data('id'));
+                $('#delete_type').val($(this).data('type'));
+                $('#deletemodal').modal('show');
+            });
+
+            $('#delete_modal_clear').on('submit', function(e) {
+                e.preventDefault();
+                let id = $('#delete_id').val();
+                $.ajax({
+                    url: "{{ route('admin.brands.destroy', ':id') }}".replace(':id', id),
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(res) {
+                        dt.ajax.reload(null, false);
+                        successModal('SUCCESSFULLY DELETED');
+                    },
+                    error: function(xhr) {
+                        errorModal();
+                        console.error(xhr.responseText || xhr.statusText);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+@endsection
+---------------------
 
+@extends('backend.layouts.app')
+@section('title', isset($brand) ? 'Edit Brand' : 'Add Brand')
 
-==================
+@section('content')
+    <div class="content-wrapper">
+        <x-breadcrumbs :title="isset($brand) ? 'Edit Brand' : 'Add Brand'" :breadcrumbs="[
+            ['text' => 'Brand List', 'url' => route('admin.brands.index')],
+            ['text' => isset($brand) ? 'Edit' : 'Create'],
+        ]" />
 
-Make store and update one request files, as=>
+        <div class="card p-4">
+            <form action="{{ isset($brand) ? route('admin.brands.update', $brand->id) : route('admin.brands.store') }}"
+                method="POST" enctype="multipart/form-data">
+                @csrf
+                @if (isset($brand))
+                    @method('PUT')
+                @endif
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control"
+                            value="{{ old('name', $brand->name ?? '') }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Subtitle</label>
+                        <input type="text" name="subtitle" class="form-control"
+                            value="{{ old('subtitle', $brand->subtitle ?? '') }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Website</label>
+                        <input type="url" name="website_url" class="form-control"
+                            value="{{ old('website_url', $brand->website_url ?? '') }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Logo</label>
+                        <input type="file" name="logo" class="form-control">
+                        @if (isset($brand) && $brand->logo)
+                            <img src="{{ asset($brand->logo) }}" height="60" class="mt-2">
+                        @endif
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label>Description</label>
+                        <textarea id="summernote" name="description" class="form-control">
+                        {{ old('description', $brand->description ?? '') }}
+                    </textarea>
+                    </div>
+
+                </div>
+
+                <div class="text-end mt-3">
+                    <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">Back</a>
+                    <button class="btn btn-primary">
+                        {{ isset($brand) ? 'Update' : 'Save' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+======================
+
+@extends('backend.layouts.app')
+@section('title', 'Brand Details')
+
+@section('content')
+    <div class="content-wrapper">
+        <x-breadcrumbs title="Brand Details" />
+
+        <div class="card p-4">
+
+            {{-- Logo --}}
+            <div class="text-center mb-4">
+                @if ($brand->logo)
+                    <img src="{{ asset($brand->logo) }}" height="100" class="rounded">
+                @else
+                    <span class="text-muted">No Logo</span>
+                @endif
+            </div>
+
+            {{-- Details Table --}}
+            <table class="table table-bordered">
+
+                <tr>
+                    <th width="200">Name</th>
+                    <td>{{ $brand->name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Subtitle</th>
+                    <td>{{ $brand->subtitle ?? 'N/A' }}</td>
+                </tr>
+
+                <tr>
+                    <th>Website</th>
+                    <td>
+                        @if ($brand->website_url)
+                            <a href="{{ $brand->website_url }}" target="_blank">
+                                {{ $brand->website_url }}
+                            </a>
+                        @else
+                            N/A
+                        @endif
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        {!! $brand->is_active
+                            ? '<span class="badge bg-success">Active</span>'
+                            : '<span class="badge bg-danger">Inactive</span>' !!}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Description</th>
+                    <td>
+                        {!! $brand->description ?? '<span class="text-muted">No description</span>' !!}
+                    </td>
+                </tr>
+
+            </table>
+
+            {{-- Back Button --}}
+            <div class="text-end mt-3">
+                <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">
+                    Back
+                </a>
+            </div>
+
+        </div>
+    </div>
+@endsection
+
+============
 
 <?php
-namespace App\Http\Requests\Industry;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
+namespace App\Models;
 
-class IndustryRequest extends FormRequest
+use Illuminate\Database\Eloquent\Model;
+
+class Brand extends Model
 {
-    public function authorize(): bool
+    protected $guarded = [];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'is_active',
+    ];
+    protected $casts = [
+        'id'                => 'integer',
+        'is_active'         => 'boolean',
+        'created_at'        => 'datetime',
+        'updated_at'        => 'datetime',
+
+    ];
+
+    public function scopeActive($query)
     {
-        return true;
-    }
-
-    public function rules(): array
-    {
-        $id = $this->route('industry')?->id;
-
-        return [
-            'industrie_list_id'   => 'required|exists:industrie_lists,id|unique:industries,industrie_list_id,' . $id,
-
-            // MAIN SECTION
-            'main_title'               => 'required|string|max:255',
-            'title'               => 'required|string|max:255',
-            'subtitle'            => 'required|string|max:255',
-            'description'         => 'required|string',
-            'slug'                => 'required|string|max:255|unique:industries,slug,' . $id,
-            'image'               => 'nullable|image',
-
-            // HERO SECTION
-            'hero_title'          => 'required|string|max:255',
-            'hero_description'    => 'required|string',
-            'hero_image'          => 'nullable|image',
-            'hero_button_text'  => 'nullable|string|max:255',
-            'hero_button_link'  => 'nullable|string',
-
-            // GALLERY
-            'gallery_title'       => 'required|string|max:255',
-            'gallery_description' => 'required|string',
-            'gallery_images.*'    => 'image',
-
-            // SUB FOOTER
-            'footer_image'        => 'nullable|image',
-            'footer_main_title'   => 'nullable|string|max:255',
-            'footer_title'        => 'required|string|max:255',
-            'footer_description'  => 'required|string',
-            'footer_button_text'  => 'nullable|string|max:255',
-            'footer_button_link'  => 'nullable|string',
-
-            'is_active'           => 'required|boolean',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'industrie_list_id.unique'=> 'The selected industry Category is already associated with another industry.',
-        ];
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'slug'      => Str::slug(trim(strtolower($this->slug))),
-            'is_active' => $this->has('is_active'),
-        ]);
+        return $query->where('is_active', true);
     }
 }
 
 
-===================
 
-and make one blade file for both create and edit
-as demo,
+=============
 
-  <form
-                    action="{{ isset($industry) ? route('admin.industries.lists.update', $industry->id) : route('admin.industries.lists.store') }}"
-                    method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @if (isset($industry))
-                        @method('PUT')
-                    @endif
+Based on these Now i want to complete blog module as=>
+title, image, short desctiption, long desctiption
 
-                    <!-- HERO SECTION -->
-                    <h4>Hero Section</h4>
-                    <div class="row mb-3">
+long desctiption will be text editon summernote, 
 
-                        <div class="col-md-12">
-                            <label>Hero Title</label>
-                            <input type="text" name="hero_title" class="form-control"
-                                value="{{ old('hero_title', $industry->hero_title ?? '') }}">
-                            @error('hero_title')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Hero Description</label>
-                            <textarea name="hero_description" class="form-control">{{ old('hero_description', $industry->hero_description ?? '') }}</textarea>
-                            @error('hero_description')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Hero Button Text</label>
-                            <input type="text" name="hero_button_text" class="form-control"
-                                value="{{ old('hero_button_text', $industry->hero_button_text ?? '') }}">
-                            @error('hero_button_text')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Hero Button Link</label>
-                            <input type="text" name="hero_button_link" class="form-control"
-                                value="{{ old('hero_button_link', $industry->hero_button_link ?? '') }}">
-                            @error('hero_button_link')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Hero Image</label>
-                            <input type="file" name="hero_image" class="dropify"
-                                data-default-file="{{ isset($industry->hero_image) ? asset($industry->hero_image) : '' }}">
-                            @error('hero_image')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                    </div>
-
-                    <!-- MAIN SECTION -->
-                    <h4 class="mt-4">Main Section</h4>
-                    <div class="row mb-3">
-
-                        <div class="col-md-6 mt-3">
-                            <label>Industry Category</label>
-                            <select name="industrie_list_id" class="form-control">
-                                <option value="">-- Select Category --</option>
-                                @foreach ($industrieLists as $list)
-                                    <option value="{{ $list->id }}"
-                                        {{ old('industrie_list_id', $industry->industrie_list_id ?? '') == $list->id ? 'selected' : '' }}>
-                                        {{ $list->title }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('industrie_list_id')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Main Title</label>
-                            <input type="text" name="main_title" id="main_title" class="form-control"
-                                value="{{ old('main_title', $industry->main_title ?? '') }}">
-                            @error('main_title')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mt-3">
-                            <label>Title</label>
-                            <input type="text" name="title" id="title" class="form-control"
-                                value="{{ old('title', $industry->title ?? '') }}">
-                            @error('title')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control"
-                                value="{{ old('slug', $industry->slug ?? '') }}">
-                            @error('slug')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Subtitle</label>
-                            <input type="text" name="subtitle" class="form-control"
-                                value="{{ old('subtitle', $industry->subtitle ?? '') }}">
-                            @error('subtitle')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+so give me migration, model, controller, and blade file index, create and show, also give me required command for create files
 
 
 
-                        <div class="col-md-12 mt-3">
-                            <label>Main Description</label>
-                            <textarea name="description" id="summernote" class="form-control">{{ old('description', $industry->description ?? '') }}</textarea>
-                            @error('description')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
 
-                        <div class="col-md-12 mt-3">
-                            <label>Main Image</label>
-                            <input type="file" name="image" class="dropify"
-                                data-default-file="{{ isset($industry->image) ? asset($industry->image) : '' }}">
-                            @error('image')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                    </div>
-
-                    <!-- GALLERY SECTION -->
-                    <h4 class="mt-4">Gallery Section</h4>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label>Gallery Title</label>
-                            <input type="text" name="gallery_title" class="form-control"
-                                value="{{ old('gallery_title', $industry->gallery_title ?? '') }}">
-                            @error('gallery_title')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Gallery Description</label>
-                            <textarea name="gallery_description" class="form-control">{{ old('gallery_description', $industry->gallery_description ?? '') }}</textarea>
-                            @error('gallery_description')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Gallery Images</label>
-
-                            <!-- Existing Gallery Images -->
-                            @if (isset($industry->gallery_images) && count($industry->gallery_images))
-                                <div class="mb-3 d-flex flex-wrap" id="existing-gallery">
-                                    @foreach ($industry->gallery_images as $img)
-                                        <div class="position-relative me-2 mb-2" style="width: 120px; height: 80px;">
-                                            <img src="{{ asset($img) }}" class="img-thumbnail w-100 h-100"
-                                                style="object-fit: cover;">
-                                            <button type="button"
-                                                class="btn btn-sm btn-danger position-absolute top-0 end-0 delete-gallery-image"
-                                                data-id="{{ $industry->id }}" data-img="{{ $img }}"
-                                                style="z-index: 10;">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            <!-- New Gallery Images -->
-                            <div id="gallery-wrapper">
-                                <div class="gallery-row d-flex mb-2 align-items-center">
-                                    <input type="file" name="gallery_images[]" class="form-control me-2">
-                                    <button type="button" class="btn btn-success add-gallery">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            @error('gallery_images.*')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                    </div>
-
-                    <!-- SUB FOOTER SECTION -->
-                    <h4 class="mt-4">Sub Footer Section</h4>
-                    <div class="row mb-3">
-                        <div class="col-md-6 mt-3">
-                            <label>Sub Footer Main Title</label>
-                            <input type="text" name="footer_main_title" class="form-control"
-                                value="{{ old('footer_main_title', $industry->footer_main_title ?? '') }}">
-                            @error('footer_main_title')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Sub Footer Title</label>
-                            <input type="text" name="footer_title" class="form-control"
-                                value="{{ old('footer_title', $industry->footer_title ?? '') }}">
-                            @error('footer_title')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Sub Footer Button Text</label>
-                            <input type="text" name="footer_button_text" class="form-control"
-                                value="{{ old('footer_button_text', $industry->footer_button_text ?? '') }}">
-                            @error('footer_button_text')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mt-3">
-                            <label>Sub Footer Button Link</label>
-                            <input type="text" name="footer_button_link" class="form-control"
-                                value="{{ old('footer_button_link', $industry->footer_button_link ?? '') }}">
-                            @error('footer_button_link')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Sub Footer Description</label>
-                            <textarea name="footer_description" rows="3" class="form-control">{{ old('footer_description', $industry->footer_description ?? '') }}</textarea>
-                            @error('footer_description')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12 mt-3">
-                            <label>Sub Footer Image</label>
-                            <input type="file" name="footer_image" class="dropify"
-                                data-default-file="{{ isset($industry->footer_image) ? asset($industry->footer_image) : '' }}">
-                            @error('footer_image')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="mt-4 form-check form-switch form-switch-lg">
-                        <input type="checkbox" class="form-check-input" name="is_active"
-                            {{ old('is_active', $industry->is_active ?? false) ? 'checked' : '' }}>
-                        <label class="form-check-label">Active</label>
-                    </div>
-
-                    <div class="mt-4 float-end">
-                        <a href="{{ route('admin.industries.lists.index') }}"
-                            class="btn btn-secondary btn-lg me-2">Back</a>
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            {{ isset($industry) ? 'Update' : 'Save' }}
-                        </button>
-                    </div>
-
-                </form>

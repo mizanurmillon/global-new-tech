@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('how_t_o_work_services', function (Blueprint $table) {
+        Schema::create('how_to_work_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('core_service_id')->constrained('core_services')->nullOnDelete();
+            $table->foreignId('core_service_id')->constrained('core_services')->cascadeOnDelete();
             $table->string('how_to_work_title')->nullable();
             $table->string('how_to_work_sub_title')->nullable();
             $table->string('how_to_work_icon')->nullable();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('how_t_o_work_services');
+        Schema::dropIfExists('how_to_work_services');
     }
 };

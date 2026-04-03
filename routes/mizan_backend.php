@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Web\Backend\Services\ComprServicesController;
+use App\Http\Controllers\Web\Backend\Service\ComprServicesController;
 use Illuminate\Support\Facades\Route;
 
 

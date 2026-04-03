@@ -71,29 +71,22 @@
             </a>
         </li>
 
-         <li class="">
-            <a href="/admin/compr-services" aria-expanded="false">
+        <li class="">
+            <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                 </div>
                 <div class="nav_title">
-                    <span>Comp Services</span>
+                    <span>Services</span>
                 </div>
             </a>
+            <ul>
+                <li> <a href="/admin/services">Core Services</a> </li>
+                <li> <a href="/admin/sub-services">Sub Services</a> </li>
+                <li> <a href="/admin/compr-services">Comp Services</a> </li>
+
+            </ul>
         </li>
-
-         <li class="">
-            <a href="/admin/compr-services" aria-expanded="false">
-                <div class="nav_icon_small">
-                   <i class="fa-brands fa-whmcs"></i>
-                </div>
-                <div class="nav_title">
-                    <span>Core Services</span>
-                </div>
-            </a>
-        </li>
-
-
 
         {{-- <li class="">
             <a href="/admin/users" aria-expanded="false" class="active">

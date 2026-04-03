@@ -11,7 +11,8 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <x-table-header title="CMS Contents" :route="route('admin.cms_contents.create')" />
+                        <x-table-header title="CMS Contents"  />
+                        {{-- <x-table-header title="CMS Contents" :route="route('admin.cms_contents.create')" /> --}}
                         <div class="table-responsive w-100">
                             <table class="table reloadAdminTable table-hover" id="cms-table">
                                 <thead>

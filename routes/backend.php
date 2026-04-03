@@ -3,6 +3,8 @@
 use App\Http\Controllers\Web\Backend\Blog\BlogController;
 use App\Http\Controllers\Web\Backend\Brand\BrandController;
 use App\Http\Controllers\Web\Backend\Dashboard\DashboardController;
+use App\Http\Controllers\Web\Backend\Service\CoreServiceController;
+use App\Http\Controllers\Web\Backend\Service\SubServiceController;
 use App\Http\Controllers\Web\Backend\Team\TeamMemberController;
 use App\Http\Controllers\Web\Backend\Testimonial\TestimonialController;
 use App\Http\Controllers\Web\Backend\User\UserController;
@@ -40,4 +42,11 @@ Route::prefix('blogs')->name('admin.blogs.')->group(function () {
     Route::patch('/status/{blog}', [BlogController::class, 'status'])->name('status');
 });
 
+Route::prefix('services')->name('admin.services.')->group(function () {
+    Route::resource('/', CoreServiceController::class)->parameter('', 'service');
+    Route::patch('/status/{service}', [CoreServiceController::class, 'status'])->name('status');
+});
 
+Route::prefix('sub-services')->name('admin.sub-services.')->group(function () {
+    Route::resource('/', SubServiceController::class)->parameter('', 'subService');
+});

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('service_values', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('core_service_id')->constrained('core_services')->nullOnDelete();
+            $table->foreignId('core_service_id')->constrained('core_services')->cascadeOnDelete();
             $table->string('value_title')->nullable();
             $table->string('value_sub_title')->nullable();
             $table->string('value')->nullable();

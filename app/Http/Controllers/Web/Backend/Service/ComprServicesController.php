@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\Backend\Services;
+namespace App\Http\Controllers\Web\Backend\Service;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Service\ComprServicesRequest;

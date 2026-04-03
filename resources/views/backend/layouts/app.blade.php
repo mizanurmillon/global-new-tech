@@ -54,6 +54,10 @@
         <script>
             successModal('{{ session('success') }}');
         </script>
+    @elseif (session('error'))
+        <script>
+            errorModal('{{ session('error') }}');
+        </script>
     @endif
     @if ($errors->any())
         <script>

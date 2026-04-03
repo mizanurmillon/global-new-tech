@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SystemSettingSeeder::class,
             DynamicPageSeeder::class,
-            ContactSubmissionSeeder::class,
+            // ContactSubmissionSeeder::class,
             CmsContentSeeder::class,
             CmsContentItemSeeder::class,
             TeamMemberSeeder::class,
@@ -23,6 +23,10 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
             SocialMediaSeeder::class,
             BlogSeeder::class,
+            ComprServiceSeeder::class,
+            CoreServiceSeeder::class,
+            SubServiceSeeder::class,
+
         ]);
     }
 }

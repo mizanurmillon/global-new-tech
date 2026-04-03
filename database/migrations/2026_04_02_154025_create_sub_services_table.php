@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sub_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('core_service_id')->constrained('core_services')->nullOnDelete();
+            $table->foreignId('core_service_id')->constrained('core_services')->cascadeOnDelete();
             $table->string('sub_service_title')->nullable();
             $table->string('sub_service_sub_title')->nullable();
             $table->longText('sub_service_description')->nullable();

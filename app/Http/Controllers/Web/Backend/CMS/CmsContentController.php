@@ -52,7 +52,7 @@ class CmsContentController extends Controller
                         'id'     => $data->id,
                         'show'   => 'admin.cms_contents.show',
                         'edit'   => 'admin.cms_contents.edit',
-                        'delete' => true,
+                        'delete' => false,
                     ])->render();
                 })
                 ->rawColumns(['is_active', 'action'])
