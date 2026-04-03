@@ -5,7 +5,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Admin
+class Team
 {
     public function handle(Request $request, Closure $next)
     {
@@ -21,7 +21,7 @@ class Admin
             Auth::logout();
             abort(403, 'Please Contract Our Support');
         }
-        if ($user->role === 'admin') {
+        if ($user->role === 'admin' || $user->role === 'team') {
             return $next($request);
         }
 

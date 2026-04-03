@@ -2,6 +2,8 @@
 
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\CheckUserEnabled;
+use App\Http\Middleware\Guest;
+use App\Http\Middleware\Team;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -23,20 +25,21 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('api')
                 ->group(base_path('routes/mizan_api.php'));
 
-            Route::middleware(['web', 'auth', 'admin'])
+            Route::middleware(['web', 'auth'])
                 ->prefix('admin')
                 ->group(base_path('routes/backend.php'));
 
-            Route::middleware(['web', 'auth', 'admin'])
+            Route::middleware(['web', 'auth', 'team'])
                 ->prefix('admin')
                 ->group(base_path('routes/admin_setting.php'));
 
-            Route::middleware(['web', 'auth', 'admin'])
+            Route::middleware(['web', 'auth', 'team'])
                 ->prefix('admin')
                 ->group(base_path('routes/mizan_backend.php'));
 
             Route::middleware(['web'])
                 ->group(base_path('routes/frontend.php'));
+
             Route::middleware(['web', 'auth', 'admin'])
                 ->prefix('admin')
                 ->group(base_path('routes/cms.php'));
@@ -45,8 +48,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'admin'     => Admin::class,
-            'enabled'   => CheckUserEnabled::class,   
+            'admin'   => Admin::class,
+            'guest'   => Guest::class,
+            'team'    => Team::class,
+            'enabled' => CheckUserEnabled::class,
         ]);
 
         // Ensure web middleware group includes CSRF protection

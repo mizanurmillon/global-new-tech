@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\TeamMember;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class TeamMemberSeeder extends Seeder
@@ -11,28 +11,48 @@ class TeamMemberSeeder extends Seeder
 
         $teamData = [
             [
-                'name'     => 'John Anderson',
-                'position' => 'CEO & Founder',
-                'image'    => '/uploads/team/members/team1.png',
+                'name'              => 'John Anderson',
+                'email'             => 'john@globalnewtech.com',
+                'password'          => bcrypt('12345678'),
+                'position'          => 'CEO & Founder',
+                'avatar_path'       => '/uploads/team/members/team1.png',
+                'role'              => 'team',
+                'is_active'         => true,
+                'email_verified_at' => now(),
             ],
             [
-                'name'     => 'Emma Williams',
-                'position' => 'CTO',
-                'image'    => '/uploads/team/members/team2.png',
+                'name'              => 'Emma Williams',
+                'email'             => 'emma.williams@globalnewtech.com',
+                'password'          => bcrypt('12345678'),
+                'position'          => 'CTO',
+                'avatar_path'       => '/uploads/team/members/team2.png',
+                'role'              => 'team',
+                'is_active'         => true,
+                'email_verified_at' => now(),
             ],
             [
-                'name'     => 'David Lee',
-                'position' => 'Head of Operations',
-                'image'    => '/uploads/team/members/team3.png',
+                'name'              => 'David Lee',
+                'email'             => 'david.lee@globalnewtech.com',
+                'password'          => bcrypt('12345678'),
+                'position'          => 'Head of Operations',
+                'avatar_path'       => '/uploads/team/members/team3.png',
+                'role'              => 'team',
+                'is_active'         => true,
+                'email_verified_at' => now(),
             ],
             [
-                'name'     => 'Sofia Martinez',
-                'position' => 'Head of Development',
-                'image'    => '/uploads/team/members/team4.png',
+                'name'              => 'Sofia Martinez',
+                'email'             => 'sofia.martinez@globalnewtech.com',
+                'password'          => bcrypt('12345678'),
+                'position'          => 'Head of Development',
+                'avatar_path'       => '/uploads/team/members/team4.png',
+                'role'              => 'team',
+                'is_active'         => true,
+                'email_verified_at' => now(),
             ],
         ];
 
-        TeamMember::insert($teamData);
+        User::insert($teamData);
 
     }
 }

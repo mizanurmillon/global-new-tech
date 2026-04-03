@@ -33,12 +33,11 @@
                                 <i class="ti-rss-alt"></i> <!-- Default icon -->
                             </a>
                         </li> --}}
-                        <li>
+                        {{-- <li>
                             <a class="bell_notification_clicker nav-link-notify" href="#">
                                 <img src="{{ asset('backend/assets/img/icon/bell.svg') }}" alt="" />
                                 <span>8</span>
                             </a>
-                            <!-- Menu_NOtification_Wrap  -->
                             <div class="Menu_NOtification_Wrap">
                                 <div class="notification_Header">
                                     <h4>Notifications</h4>
@@ -133,7 +132,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                     </div>
                     <div class="profile_info d-flex align-items-center">
                         <div class="profile_thumb mr_20">
@@ -144,6 +143,9 @@
                             @endphp
                             @if ($Photo == null)
                                 <img class="img-xs rounded-circle admin_picture" src="{{ $profilePhoto }}"
+                                    alt="" />
+                            @elseif (public_path($Photo) && file_exists(public_path($Photo)))
+                                <img class="img-xs rounded-circle admin_picture" src="{{ asset($Photo) }}"
                                     alt="" />
                             @else
                                 <img class="img-xs rounded-circle admin_picture"

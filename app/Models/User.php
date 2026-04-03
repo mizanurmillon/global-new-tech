@@ -15,7 +15,7 @@ class User extends Authenticatable
     protected $guarded = [];
 
     protected $hidden = [
-        'password',
+        // 'password',
         'remember_token',
         'email_verified_at',
         'provider_id',
@@ -50,6 +50,10 @@ class User extends Authenticatable
     public function scopeUser($q)
     {
         return $q->where('role', 'user');
+    }
+    public function scopeTeam($q)
+    {
+        return $q->where('role', 'team');
     }
 
     public function notifications()

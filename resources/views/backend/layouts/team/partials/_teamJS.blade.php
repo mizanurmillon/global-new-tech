@@ -19,7 +19,7 @@
                        name: 'position'
                    },
                    {
-                       data: 'image',
+                       data: 'avatar_path',
                        name: 'image',
                        orderable: false,
                        searchable: false

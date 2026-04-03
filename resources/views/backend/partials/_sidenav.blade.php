@@ -1,4 +1,7 @@
 <!-- sidebar  -->
+@php
+    $authUser = auth()->user();
+@endphp
 <nav id="sidebar" class="sidebar ">
     <!-- Logo  -->
     <div class="logo d-flex justify-content-center">
@@ -27,16 +30,18 @@
                 </div>
             </a>
         </li>
-        <li class="">
-            <a href="/admin/team" aria-expanded="false" class="active">
-                <div class="nav_icon_small">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="nav_title">
-                    <span>Team Members</span>
-                </div>
-            </a>
-        </li>
+        @if ($authUser->role === 'admin')
+            <li>
+                <a href="/admin/team" aria-expanded="false" class="active">
+                    <div class="nav_icon_small">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="nav_title">
+                        <span>Team Members</span>
+                    </div>
+                </a>
+            </li>
+        @endif
 
         <li class="">
             <a href="/admin/brands" aria-expanded="false" class="active">
@@ -70,23 +75,24 @@
                 </div>
             </a>
         </li>
+        @if ($authUser->role === 'admin')
+            <li class="">
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+                    <div class="nav_title">
+                        <span>Services</span>
+                    </div>
+                </a>
+                <ul>
+                    <li> <a href="/admin/services">Core Services</a> </li>
+                    <li> <a href="/admin/sub-services">Sub Services</a> </li>
+                    <li> <a href="/admin/compr-services">Comp Services</a> </li>
 
-        <li class="">
-            <a class="has-arrow" href="#" aria-expanded="false">
-                <div class="nav_icon_small">
-                    <i class="fa-solid fa-screwdriver-wrench"></i>
-                </div>
-                <div class="nav_title">
-                    <span>Services</span>
-                </div>
-            </a>
-            <ul>
-                <li> <a href="/admin/services">Core Services</a> </li>
-                <li> <a href="/admin/sub-services">Sub Services</a> </li>
-                <li> <a href="/admin/compr-services">Comp Services</a> </li>
-
-            </ul>
-        </li>
+                </ul>
+            </li>
+        @endif
 
         {{-- <li class="">
             <a href="/admin/users" aria-expanded="false" class="active">
@@ -100,19 +106,18 @@
         </li> --}}
 
 
-
-        <li class="">
-            <a href="/admin/cms-contents" aria-expanded="false" class="active">
-                <div class="nav_icon_small">
-                    <i class="fas fa-sticky-note"></i>
-                </div>
-                <div class="nav_title">
-                    <span>CMS</span>
-                </div>
-            </a>
-        </li>
-
-
+        @if ($authUser->role === 'admin')
+            <li class="">
+                <a href="/admin/cms-contents" aria-expanded="false" class="active">
+                    <div class="nav_icon_small">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="nav_title">
+                        <span>CMS</span>
+                    </div>
+                </a>
+            </li>
+        @endif
         <li class="">
             <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">
@@ -125,7 +130,7 @@
             <ul>
                 <li> <a href="/admin/profile">Profile Settings</a> </li>
                 <li> <a href="/admin/system-setting">System Settings</a> </li>
-                <li> <a href="/admin/dynamic-page">Dynamic Page</a> </li>
+                {{-- <li> <a href="/admin/dynamic-page">Dynamic Page</a> </li> --}}
                 <li> <a href="/admin/social-media">Social Settings</a> </li>
                 <li> <a href="/admin/mail-setting">Mail Settings</a> </li>
             </ul>

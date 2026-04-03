@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 50)->nullable();
             $table->string('email', 100)->unique();
             $table->string('phone', 30)->nullable();
+            $table->string('position')->nullable();
             $table->string('password')->nullable();
             $table->string('role')->default('user');
             $table->string('avatar_path')->nullable();

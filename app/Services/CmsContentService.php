@@ -6,10 +6,12 @@ use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\CmsContent;
 use App\Models\CmsContentItem;
+use App\Models\ComprService;
+use App\Models\CoreService;
 use App\Models\SocialMedia;
 use App\Models\SystemSetting;
-use App\Models\TeamMember;
 use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,11 +20,7 @@ class CmsContentService
 {
     public function getPageContent(string $page): array
     {
-        $contents = CmsContent::with('items')
-            ->where('page', $page)
-            ->active()
-            ->orderBy('id', 'asc')
-            ->get();
+        $contents = CmsContent::with('items')->where('page', $page)->active()->orderBy('id', 'asc')->get();
 
         $response   = [];
         $pageConfig = config("cms_sections.{$page}", []);
@@ -256,10 +254,16 @@ class CmsContentService
                 return Testimonial::query()->active()->latest()->limit(10)->get();
 
             case Section::TEAM_SECTION->value:
-                return TeamMember::query()->latest()->get();
-                
+                return User::query()->team()->latest()->get(['name', 'position', 'avatar_path']);
+
             case Section::BLOG_SECTION->value:
                 return Blog::query()->active()->latest()->limit(3)->get(['id', 'title', 'short_description', 'image']);
+
+            case Section::SERVICES_SECTION->value:
+                return CoreService::query()->active()->limit(5)->get(['id', 'service_icon', 'service_title', 'slug', 'service_subtitle', 'service_description']);
+
+            case Section::COMPREHENSIVE_SERVICES_SECTION->value:
+                return ComprService::query()->active()->get(['id', 'icon', 'title', 'short_description', 'description']);
 
         }
 

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Web\Auth;
 
 use App\Http\Controllers\Controller;
@@ -28,7 +27,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard', absolute: false))->with('success','WELCOME TO DASHBOARD');
+        return redirect()->intended(route('admin.dashboard', absolute: false))->with('success', 'WELCOME TO DASHBOARD');
     }
 
     /**
