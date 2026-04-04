@@ -22,17 +22,18 @@ class SecurityAssessmentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'assigned_by' => 'nullable|exists:users,id',
+            'assigned_to' => 'nullable|exists:users,id',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:security_assessments,email',
             'phone_number' => 'required|string|max:20',
             'company_name' => 'required|string|max:255',
             'security_interest' => 'required|string|max:255',
             'company_size' => 'nullable|string|max:100',
-            'timeline' => 'nullable|string|max:100',
+            'timeline' => 'required|string|max:100',
             'budget_range' => 'nullable|string|max:100',
             'message' => 'nullable|string',
-            'status' => 'nullable|in:pending,in_progress,completed',
-
+            'status' => 'nullable|string|max:50',
         ];
     }
 }

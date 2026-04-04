@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class SecurityAssessment extends Model
 {
     protected $fillable = [
+        'id',
+        'assigned_by',
+        'assigned_to',
         'full_name',
         'email',
         'phone_number',
@@ -23,4 +26,14 @@ class SecurityAssessment extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function assignedBy()
+    {
+        return $this->belongsTo(User::class, 'assigned_by');
+    }
+
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 }

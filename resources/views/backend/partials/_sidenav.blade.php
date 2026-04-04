@@ -92,6 +92,18 @@
 
                 </ul>
             </li>
+
+            <li class="">
+                <a href="/admin/security-assessment" aria-expanded="false" class="active">
+                    <div class="nav_icon_small">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="nav_title">
+                        <span>Security Assessment</span>
+                    </div>
+                </a>
+            </li>
+
         @endif
 
         {{-- <li class="">

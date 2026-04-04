@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('security_assessments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('assigned_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
             $table->string('full_name')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
@@ -22,7 +24,7 @@ return new class extends Migration
             $table->string('timeline')->nullable();
             $table->string('budget_range')->nullable();
             $table->text('message')->nullable();
-            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
