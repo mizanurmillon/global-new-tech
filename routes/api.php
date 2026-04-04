@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\SocialAuthController;
 use App\Http\Controllers\Api\V1\BlogController;
 use App\Http\Controllers\Api\V1\CmsContentController;
+use App\Http\Controllers\Api\V1\ServiceController;
 use App\Http\Controllers\Web\Backend\Settings\DynamicPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,9 @@ Route::prefix('v1')->group(function () {
 
     Route::get('blogs', [BlogController::class, 'index']);
     Route::get('blogs/{blog}', [BlogController::class, 'show']);
+
+    Route::get('services', [ServiceController::class, 'index']);
+    Route::get('services/{service}', [ServiceController::class, 'show']);
 
     // Protected routes -------------------------------------------------------------------
     Route::middleware(['auth:sanctum', 'enabled'])->group(function () {

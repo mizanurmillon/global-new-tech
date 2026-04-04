@@ -13,6 +13,10 @@ class HowToWorkService extends Model
         'created_at'      => 'datetime',
         'updated_at'      => 'datetime',
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 
     public function coreService()
     {

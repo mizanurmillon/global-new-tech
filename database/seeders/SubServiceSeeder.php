@@ -18,64 +18,65 @@ class SubServiceSeeder extends Seeder
 
             foreach ([
                 [
-                    'sub_service_title'       => '24/7/365 Monitoring',
-                    'sub_service_sub_title'   => 'Round-the-clock coverage across all time zones',
-                    'sub_service_description' => '<p>Round-the-clock security monitoring by expert analysts across all time zones. Your infrastructure is never unattended.</p>',
+
+                    "sub_service_icon"      => "/uploads/services/icons/time.png",
+                    'sub_service_title'     => '24/7/365 Monitoring',
+                    'sub_service_sub_title' => 'Round-the-clock security monitoring by expert analysts across all time zones. Your infrastructure is never unattended.',
                 ],
                 [
-                    'sub_service_title'       => 'Real-Time Threat Detection',
-                    'sub_service_sub_title'   => 'AI-powered analytics to detect threats instantly',
-                    'sub_service_description' => '<p>Advanced SIEM technology combined with AI-powered analytics to detect threats the moment they emerge.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/beal.png",
+                    'sub_service_title'     => 'Real-Time Threat Detection',
+                    'sub_service_sub_title' => 'Advanced SIEM technology combined with AI-powered analytics to detect threats the moment they emerge.',
                 ],
                 [
-                    'sub_service_title'       => 'Rapid Incident Response',
-                    'sub_service_sub_title'   => 'Average 5-minute response time to critical alerts',
-                    'sub_service_description' => '<p>Average 5-minute response time to critical alerts. Our team acts immediately to contain and neutralize threats.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/flash_1.png",
+                    'sub_service_title'     => 'Rapid Incident Response',
+                    'sub_service_sub_title' => 'Average 5-minute response time to critical alerts. Our team acts immediately to contain and neutralize threats.',
                 ],
                 [
-                    'sub_service_title'       => 'Threat Investigation & Forensics',
-                    'sub_service_sub_title'   => 'Deep-dive analysis of security incidents',
-                    'sub_service_description' => '<p>Deep-dive analysis of security incidents to understand attack vectors, scope of compromise, and prevent recurrence.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/search.png",
+                    'sub_service_title'     => 'Threat Investigation & Forensics',
+                    'sub_service_sub_title' => 'Deep-dive analysis of security incidents to understand attack vectors, scope of compromise, and prevent recurrence.',
                 ],
                 [
-                    'sub_service_title'       => 'Compliance Reporting',
-                    'sub_service_sub_title'   => 'SOC 2, HIPAA, PCI-DSS, GDPR ready documentation',
-                    'sub_service_description' => '<p>Comprehensive reports for SOC 2, HIPAA, PCI-DSS, GDPR, and other regulatory frameworks. Audit-ready documentation.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/label.png",
+                    'sub_service_title'     => 'Compliance Reporting',
+                    'sub_service_sub_title' => 'Comprehensive reports for SOC 2, HIPAA, PCI-DSS, GDPR, and other regulatory frameworks. Audit-ready documentation.',
                 ],
                 [
-                    'sub_service_title'       => 'Threat Intelligence Integration',
-                    'sub_service_sub_title'   => 'Real-time global threat intelligence feeds',
-                    'sub_service_description' => '<p>Real-time feeds from global threat intelligence sources to stay ahead of emerging attack patterns.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/heart_response.png",
+                    'sub_service_title'     => 'Threat Intelligence Integration',
+                    'sub_service_sub_title' => 'Real-time feeds from global threat intelligence sources to stay ahead of emerging attack patterns.',
                 ],
                 [
-                    'sub_service_title'       => 'Vulnerability Management',
-                    'sub_service_sub_title'   => 'Continuous scanning and infrastructure assessment',
-                    'sub_service_description' => '<p>Continuous scanning and assessment of your infrastructure to identify and prioritize security weaknesses.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/lock_1.png",
+                    'sub_service_title'     => 'Vulnerability Management',
+                    'sub_service_sub_title' => 'Continuous scanning and assessment of your infrastructure to identify and prioritize security weaknesses.',
                 ],
                 [
-                    'sub_service_title'       => 'Dedicated Security Analysts',
-                    'sub_service_sub_title'   => 'Certified professionals who know your environment',
-                    'sub_service_description' => '<p>Assigned team of certified security professionals who know your environment and business priorities.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/people.png",
+                    'sub_service_title'     => 'Dedicated Security Analysts',
+                    'sub_service_sub_title' => 'Assigned team of certified security professionals who know your environment and business priorities.',
                 ],
                 [
-                    'sub_service_title'       => 'Security Posture Dashboard',
-                    'sub_service_sub_title'   => 'Real-time visibility into your security status',
-                    'sub_service_description' => '<p>Real-time visibility into your security status, active threats, and key metrics through intuitive dashboards.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/eyes.png",
+                    'sub_service_title'     => 'Security Posture Dashboard',
+                    'sub_service_sub_title' => 'Real-time visibility into your security status, active threats, and key metrics through intuitive dashboards.',
                 ],
                 [
-                    'sub_service_title'       => 'Log Management & SIEM',
-                    'sub_service_sub_title'   => 'Centralized log collection and analysis',
-                    'sub_service_description' => '<p>Centralized collection, storage, and analysis of logs from all your systems, applications, and network devices.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/log.png",
+                    'sub_service_title'     => 'Log Management & SIEM',
+                    'sub_service_sub_title' => 'Centralized collection, storage, and analysis of logs from all your systems, applications, and network devices.',
                 ],
                 [
-                    'sub_service_title'       => 'Custom Security Playbooks',
-                    'sub_service_sub_title'   => 'Tailored response procedures for your infrastructure',
-                    'sub_service_description' => '<p>Tailored response procedures specific to your infrastructure, applications, and business requirements.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/danger.png",
+                    'sub_service_title'     => 'Custom Security Playbooks',
+                    'sub_service_sub_title' => 'Tailored response procedures specific to your infrastructure, applications, and business requirements.',
                 ],
                 [
-                    'sub_service_title'       => 'Monthly Executive Reports',
-                    'sub_service_sub_title'   => 'Business-focused security metrics and recommendations',
-                    'sub_service_description' => '<p>Clear, business-focused reports showing security metrics, incidents handled, and recommendations for improvement.</p>',
+                    "sub_service_icon"      => "/uploads/services/icons/label.png",
+                    'sub_service_title'     => 'Monthly Executive Reports',
+                    'sub_service_sub_title' => 'Clear, business-focused reports showing security metrics, incidents handled, and recommendations for improvement.',
                 ],
             ] as $sub) {
                 $soc->subServices()->create($sub);
@@ -174,6 +175,7 @@ class SubServiceSeeder extends Seeder
 
             foreach ([
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/right_person.png",
                     'sub_service_title'       => 'CI/CD Pipeline Implementation',
                     'sub_service_sub_title'   => 'Automate your software delivery with security built-in at every stage',
                     'sub_service_description' => '<p>Automate your software delivery pipeline from code commit to production deployment with security built-in at every stage.</p>
@@ -185,6 +187,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/right_person.png",
                     'sub_service_title'       => 'Container & Kubernetes Security',
                     'sub_service_sub_title'   => 'Secure containerized applications with industry best practices',
                     'sub_service_description' => '<p>Secure your containerized applications with industry best practices for Docker, Kubernetes, and cloud-native deployments.</p>
@@ -196,6 +199,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/right_person.png",
                     'sub_service_title'       => 'Infrastructure as Code (IaC)',
                     'sub_service_sub_title'   => 'Provision infrastructure through code with version control and security scanning',
                     'sub_service_description' => '<p>Manage and provision infrastructure through code with version control, automated testing, and security scanning.</p>
@@ -207,6 +211,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/right_person.png",
                     'sub_service_title'       => 'DevSecOps Integration',
                     'sub_service_sub_title'   => 'Embed security into DevOps workflows without slowing down',
                     'sub_service_description' => '<p>Embed security into your DevOps workflows with automated security testing, compliance, and vulnerability management.</p>
@@ -219,6 +224,45 @@ class SubServiceSeeder extends Seeder
                 ],
             ] as $sub) {
                 $devops->subServices()->create($sub);
+            }
+        }
+
+        // =====================================================================
+        // 1. AI-Powered Security Solutions — Sub Services
+        // =====================================================================
+        $soc = CoreService::where('slug', 'ai-powered-security-solutions')->first();
+
+        if ($soc) {
+            $soc->subServices()->delete();
+
+            foreach ([
+                [
+                    "sub_service_icon"      => "/uploads/services/icons/1.png",
+                    'sub_service_title'     => 'Data Ingestion',
+                    'sub_service_sub_title' => 'Aggregate logs and telemetry from all sources.',
+                ],
+                [
+                    "sub_service_icon"      => "/uploads/services/icons/2.png",
+                    'sub_service_title'     => 'AI/ML Analysis',
+                    'sub_service_sub_title' => 'Models analyze data for anomalies and threats.',
+                ],
+                [
+                    "sub_service_icon"      => "/uploads/services/icons/3.png",
+                    'sub_service_title'     => 'Threat Validation',
+                    'sub_service_sub_title' => 'Contextual enrichment and false positive reduction.',
+                ],
+                [
+                    "sub_service_icon"      => "/uploads/services/icons/4.png",
+                    'sub_service_title'     => 'Automated Response',
+                    'sub_service_sub_title' => 'AI triggers playbooks to contain the threat.',
+                ],
+                [
+                    "sub_service_icon"      => "/uploads/services/icons/5.png",
+                    'sub_service_title'     => 'Continuous Learning',
+                    'sub_service_sub_title' => 'Models retrain on new data to stay ahead.',
+                ],
+            ] as $sub) {
+                $soc->subServices()->create($sub);
             }
         }
     }

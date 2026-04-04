@@ -11,16 +11,19 @@ class ComprServiceSeeder extends Seeder
         $services = [
             // ---- Highlight Cards (top 3) ----
             [
+                "icon"              => "/uploads/services/icons/headphones.png",
                 'title'             => '24/7 Protection',
                 'short_description' => 'Round-the-clock monitoring and incident response from our expert security operations center.',
                 'is_active'         => true,
             ],
             [
+                "icon"              => "/uploads/services/icons/brain.png",
                 'title'             => 'AI-Powered Defense',
                 'short_description' => 'Advanced machine learning algorithms detect and respond to threats before they cause damage.',
                 'is_active'         => true,
             ],
             [
+                "icon"              => "/uploads/services/icons/peoples.png",
                 'title'             => 'Expert Team',
                 'short_description' => 'Certified security professionals with decades of combined experience protecting businesses.',
                 'is_active'         => true,
@@ -28,6 +31,7 @@ class ComprServiceSeeder extends Seeder
 
             // ---- Main Service Cards ----
             [
+                "icon"              => "/uploads/services/icons/right_person.png",
                 'title'             => 'Identity & Access Management',
                 'short_description' => 'Comprehensive IAM solutions to ensure only authorized users access your critical systems and data.',
                 'description'       => '<ul>
@@ -43,6 +47,7 @@ class ComprServiceSeeder extends Seeder
                 'is_active'         => true,
             ],
             [
+                "icon"              => "/uploads/services/icons/networks.png",
                 'title'             => 'Network Security',
                 'short_description' => 'Multi-layered network defense to protect your infrastructure from external and internal threats.',
                 'description'       => '<ul>
@@ -58,6 +63,7 @@ class ComprServiceSeeder extends Seeder
                 'is_active'         => true,
             ],
             [
+                "icon"              => "/uploads/services/icons/cloud.png",
                 'title'             => 'Cloud Security',
                 'short_description' => 'End-to-end cloud security for AWS, Azure, GCP, and hybrid cloud environments.',
                 'description'       => '<ul>
@@ -73,6 +79,7 @@ class ComprServiceSeeder extends Seeder
                 'is_active'         => true,
             ],
             [
+                "icon"              => "/uploads/services/icons/files.png",
                 'title'             => 'Compliance & Governance',
                 'short_description' => 'Meet regulatory requirements and maintain security standards across your organization.',
                 'description'       => '<ul>
@@ -88,6 +95,7 @@ class ComprServiceSeeder extends Seeder
                 'is_active'         => true,
             ],
             [
+                "icon"              => "/uploads/services/icons/education.png",
                 'title'             => 'Security Awareness Training',
                 'short_description' => 'Transform your employees into your first line of defense against cyber threats.',
                 'description'       => '<ul>

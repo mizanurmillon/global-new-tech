@@ -14,6 +14,11 @@ class SubService extends Model
         'updated_at'      => 'datetime',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function coreService()
     {
         return $this->belongsTo(CoreService::class);
