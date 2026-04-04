@@ -143,7 +143,7 @@
                 <li> <a href="/admin/system-setting">System Settings</a> </li>
                 {{-- <li> <a href="/admin/dynamic-page">Dynamic Page</a> </li> --}}
                 <li> <a href="/admin/social-media">Social Settings</a> </li>
-                <li> <a href="/admin/mail-setting">Mail Settings</a> </li>
+                {{-- <li> <a href="/admin/mail-setting">Mail Settings</a> </li> --}}
             </ul>
         </li>
     </ul>
