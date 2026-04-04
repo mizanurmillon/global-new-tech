@@ -64,8 +64,7 @@ class BrandController extends Controller
 
     public function store(BrandRequest $request)
     {
-        $data              = $request->validated();
-        $data['is_active'] = $request->has('is_active');
+        $data = $request->validated();
 
         if ($request->hasFile('logo')) {
             $data['logo'] = uploadFile($request->file('logo'), 'uploads/brands');
@@ -83,8 +82,7 @@ class BrandController extends Controller
 
     public function update(BrandRequest $request, Brand $brand)
     {
-        $data              = $request->validated();
-        $data['is_active'] = $request->has('is_active');
+        $data = $request->validated();
 
         if ($request->hasFile('logo')) {
             deleteFile($brand->logo);

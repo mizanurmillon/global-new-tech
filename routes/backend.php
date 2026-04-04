@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\Backend\Dashboard\DashboardController;
 use App\Http\Controllers\Web\Backend\Service\CoreServiceController;
 use App\Http\Controllers\Web\Backend\Service\SubServiceController;
 use App\Http\Controllers\Web\Backend\Team\TeamMemberController;
+use App\Http\Controllers\Web\Backend\Technology\TechnologyController;
 use App\Http\Controllers\Web\Backend\Testimonial\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,11 @@ Route::middleware(['team'])->group(function () {
     Route::prefix('brands')->name('admin.brands.')->group(function () {
         Route::resource('/', BrandController::class)->parameter('', 'brand');
         Route::patch('/status/{brand}', [BrandController::class, 'status'])->name('status');
+    });
+
+    Route::prefix('technologies')->name('admin.technologies.')->group(function () {
+        Route::resource('/', TechnologyController::class)->parameter('', 'technology');
+        Route::patch('/status/{technology}', [TechnologyController::class, 'status'])->name('status');
     });
 
 });

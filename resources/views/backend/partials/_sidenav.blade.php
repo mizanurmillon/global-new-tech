@@ -55,6 +55,17 @@
         </li>
 
         <li class="">
+            <a href="/admin/technologies" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Technologies</span>
+                </div>
+            </a>
+        </li>
+
+        <li class="">
             <a href="/admin/testimonials" aria-expanded="false" class="active">
                 <div class="nav_icon_small">
                     <i class="fas fa-quote-right"></i>
@@ -144,7 +155,7 @@
                 <li> <a href="/admin/system-setting">System Settings</a> </li>
                 {{-- <li> <a href="/admin/dynamic-page">Dynamic Page</a> </li> --}}
                 <li> <a href="/admin/social-media">Social Settings</a> </li>
-                <li> <a href="/admin/mail-setting">Mail Settings</a> </li>
+                {{-- <li> <a href="/admin/mail-setting">Mail Settings</a> </li> --}}
             </ul>
         </li>
     </ul>

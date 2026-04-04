@@ -7,6 +7,21 @@ Route::prefix('brands')->name('admin.brands.')->group(function () {
     Route::patch('/status/{brand}', [BrandController::class, 'status'])->name('status');
 });
 
+=======
+side bar
+
+<li class="">
+   <a href="/admin/brands" aria-expanded="false" class="active">
+                <div class="nav_icon_small">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Brands</span>
+                </div>
+    </a>
+</li>
+
+============
 
 <?php
 namespace App\Http\Controllers\Web\Backend\Brand;

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CmsContentItemSeeder::class,
             TeamMemberSeeder::class,
             BrandSeeder::class,
+            TechnologySeeder::class,
             TestimonialSeeder::class,
             SocialMediaSeeder::class,
             BlogSeeder::class,

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoreService;
+use App\Models\Technology;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,14 @@ class ServiceController extends Controller
 
         $coreService->load(['serviceValues', 'subServices', 'howToWorkServices']);
 
-        return $this->success($coreService, "Core service details fetched successfully");
+        $technologies = Technology::query()->active()->get(['title', 'icon']);
+
+        $data = [
+            'service'      => $coreService,
+            'technologies' => $technologies,
+        ];
+
+        return $this->success($data, "Core service details fetched successfully");
     }
 
 }
