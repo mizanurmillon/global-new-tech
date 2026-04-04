@@ -72,6 +72,13 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <th>Message</th>
+                    <td>
+                        {!! $security_assessment->message ?? '<span class="text-muted">No message</span>' !!}
+                    </td>
+                </tr>
+
             </table>
 
             {{-- Back Button --}}
