@@ -13,4 +13,5 @@ Route::prefix('compr-services')->name('admin.compr-services.')->group(function (
 
 Route::prefix('security-assessment')->name('admin.security-assessment.')->group(function () {
    Route::resource('/', SecurityAssessmentController::class)->parameter('', 'security-assessment');
+   Route::post('/assigned-to/{security_assessment}', [SecurityAssessmentController::class, 'assignedTo'])->name('assigned-to');
 });

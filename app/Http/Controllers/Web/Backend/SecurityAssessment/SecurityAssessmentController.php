@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\backend\SecurityAssessment;
 
 use App\Http\Controllers\Controller;
 use App\Models\SecurityAssessment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -19,6 +20,12 @@ class SecurityAssessmentController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('assigned_by', function ($row) {
+                    return $row->assignedBy ? $row->assignedBy->name : 'no assigned';
+                })
+                ->addColumn('assigned_to', function ($row) {
+                    return $row->assignedTo ? $row->assignedTo->name : 'no assigned';
+                })
                 ->addColumn('status', function ($row) {
                     if($row->status == 'pending') {
                         return '<span class="badge bg-warning">Pending</span>';
@@ -46,7 +53,7 @@ class SecurityAssessmentController extends Controller
                     ])->render();
                 })
 
-                ->rawColumns(['status', 'action'])
+                ->rawColumns(['status', 'action', 'assigned_by', 'assigned_to'])
                 ->make(true);
         }
         return view('backend.layouts.security-assessment.index');
@@ -73,7 +80,8 @@ class SecurityAssessmentController extends Controller
      */
     public function show(SecurityAssessment $security_assessment)
     {
-        return view('backend.layouts.security-assessment.show', compact('security_assessment'));
+        $team_members = User::where('role','team')->get();
+        return view('backend.layouts.security-assessment.show', compact('security_assessment', 'team_members'));
     }
 
     /**
@@ -103,5 +111,19 @@ class SecurityAssessmentController extends Controller
             'success' => true,
             'message' => 'Deleted successfully',
         ]);
+    }
+
+    public function assignedTo(Request $request, SecurityAssessment $security_assessment)
+    {
+        $request->validate([
+            'assigned_to' => 'required|exists:users,id',
+        ]);
+
+        $security_assessment->assigned_by = auth()->id();
+        $security_assessment->assigned_to = $request->assigned_to;
+        $security_assessment->status = 'assigned';
+        $security_assessment->save();
+
+        return redirect()->route('admin.security-assessment.show', $security_assessment->id)->with('success', 'Security Assessment assigned successfully.');
     }
 }

@@ -87,4 +87,5 @@
         width: 100px;
     }
 </style>
+
 {{-- dropify and ck-editor end --}}

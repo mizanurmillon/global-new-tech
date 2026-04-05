@@ -21,8 +21,11 @@
         "vite": "^6.0.0"
     },
     "devDependencies": {
+        "autoprefixer": "^10.4.27",
         "laravel-vite-plugin": "^1.1.1",
-        "puppeteer": "^24.20.0"
+        "postcss": "^8.5.8",
+        "puppeteer": "^24.20.0",
+        "tailwindcss": "^4.2.2"
     },
     "type": "module"
 }
