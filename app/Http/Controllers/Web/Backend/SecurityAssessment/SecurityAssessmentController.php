@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\backend\SecurityAssessment;
+namespace App\Http\Controllers\Web\Backend\SecurityAssessment;
 
 use App\Http\Controllers\Controller;
 use App\Models\SecurityAssessment;
