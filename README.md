@@ -370,6 +370,7 @@ Supported deployment targets: Vercel, Netlify, AWS, or any standard PHP/MySQL ho
 
 | Role | URL | Email | Password |
 |---|---|---|---|
+| Frontend | [https://willfills.netlify.app/](https://willfills.netlify.app/) |  |  |
 | Admin | [https://willfils.thewarriors.team/login](https://willfils.thewarriors.team/login) | `admin@admin.com` | `12345678` |
 | Team | [https://willfils.thewarriors.team/login](https://willfils.thewarriors.team/login) | `david.lee@globalnewtech.com` | `12345678` |
 
