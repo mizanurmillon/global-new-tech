@@ -186,14 +186,14 @@ class CoreServiceSeeder extends Seeder
 
         $ai->howToWorkServices()->delete();
         foreach ([
-            ["how_to_work_icon" => "/uploads/services/icons/log.png", 'how_to_work_title' => 'Predictive Threat Analytics', 'how_to_work_sub_title' => 'Our AI models analyze millions of data points to forecast potential attack vectors and identify emerging threats before they strike, moving your security posture from reactive to predictive.'],
-            ["how_to_work_icon" => "/uploads/services/icons/s_design.png", 'how_to_work_title' => 'Autonomous Threat Response', 'how_to_work_sub_title' => 'Leverage AI to automate incident response at machine speed. Threats are neutralized in seconds, minimizing dwell time and potential damage without requiring human intervention for known patterns.'],
-            ["how_to_work_icon" => "/uploads/services/icons/tag.png", 'how_to_work_title' => 'Behavioral Analytics (UEBA)', 'how_to_work_sub_title' => 'We establish a baseline of normal user and entity behavior. Our AI engine instantly detects anomalies and risky deviations, uncovering insider threats and compromised accounts.'],
-            ["how_to_work_icon" => "/uploads/services/icons/guard.png", 'how_to_work_title' => 'AI-Driven Security Operations', 'how_to_work_sub_title' => 'Enhance your SOC with AI. We automate alert triage, correlate disparate events into single incidents, and provide analysts with rich, contextual data to accelerate investigation.'],
+            ["how_to_work_icon" => "/uploads/services/icons/1.png", 'how_to_work_title' => 'Data Ingestion', 'how_to_work_sub_title' => 'Aggregate logs and telemetry from all sources.'],
+            ["how_to_work_icon" => "/uploads/services/icons/2.png", 'how_to_work_title' => 'AI/ML Analysis', 'how_to_work_sub_title' => 'Models analyze data for anomalies and threats.'],
+            ["how_to_work_icon" => "/uploads/services/icons/3.png", 'how_to_work_title' => 'Threat Validation', 'how_to_work_sub_title' => 'Contextual enrichment and false positive reduction.'],
+            ["how_to_work_icon" => "/uploads/services/icons/4.png", 'how_to_work_title' => 'Automated Response', 'how_to_work_sub_title' => 'AI triggers playbooks to contain the threat.'],
+            ["how_to_work_icon" => "/uploads/services/icons/5.png", 'how_to_work_title' => 'Continuous Learning', 'how_to_work_sub_title' => 'Models retrain on new data to stay ahead.'],
         ] as $step) {
             $ai->howToWorkServices()->create($step);
-        }
-
+        }        
         // =====================================================================
         // 5. PARTNER SOLUTION INTEGRATION
         // =====================================================================

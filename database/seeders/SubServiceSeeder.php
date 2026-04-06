@@ -93,6 +93,7 @@ class SubServiceSeeder extends Seeder
 
             foreach ([
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/right_person.png",
                     'sub_service_title'       => 'Identity & Access Management',
                     'sub_service_sub_title'   => 'Ensure only authorized users access critical systems',
                     'sub_service_description' => '<ul>
@@ -106,6 +107,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/networks.png",
                     'sub_service_title'       => 'Network Security',
                     'sub_service_sub_title'   => 'Multi-layered network defense against external and internal threats',
                     'sub_service_description' => '<ul>
@@ -120,6 +122,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/cloud.png",
                     'sub_service_title'       => 'Cloud Security',
                     'sub_service_sub_title'   => 'End-to-end cloud security for AWS, Azure, GCP, and hybrid environments',
                     'sub_service_description' => '<ul>
@@ -134,6 +137,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/files.png",
                     'sub_service_title'       => 'Compliance & Governance',
                     'sub_service_sub_title'   => 'Meet regulatory requirements and maintain security standards',
                     'sub_service_description' => '<ul>
@@ -148,6 +152,7 @@ class SubServiceSeeder extends Seeder
                     </ul>',
                 ],
                 [
+                    "sub_service_icon"        => "/uploads/services/icons/education.png",
                     'sub_service_title'       => 'Security Awareness Training',
                     'sub_service_sub_title'   => 'Transform your employees into your first line of defense',
                     'sub_service_description' => '<ul>
@@ -237,29 +242,24 @@ class SubServiceSeeder extends Seeder
 
             foreach ([
                 [
-                    "sub_service_icon"      => "/uploads/services/icons/1.png",
-                    'sub_service_title'     => 'Data Ingestion',
-                    'sub_service_sub_title' => 'Aggregate logs and telemetry from all sources.',
+                    "sub_service_icon"      => "/uploads/services/icons/log.png",
+                    'sub_service_title'     => 'Predictive Threat Analytics',
+                    'sub_service_sub_title' => 'Our AI models analyze millions of data points to forecast potential attack vectors and identify emerging threats before they strike, moving your security posture from reactive to predictive.',
                 ],
                 [
-                    "sub_service_icon"      => "/uploads/services/icons/2.png",
-                    'sub_service_title'     => 'AI/ML Analysis',
-                    'sub_service_sub_title' => 'Models analyze data for anomalies and threats.',
+                    "sub_service_icon"      => "/uploads/services/icons/s_design.png",
+                    'sub_service_title'     => 'Autonomous Threat Response',
+                    'sub_service_sub_title' => 'Leverage AI to automate incident response at machine speed. Threats are neutralized in seconds, minimizing dwell time and potential damage without requiring human intervention for known patterns.',
                 ],
                 [
-                    "sub_service_icon"      => "/uploads/services/icons/3.png",
-                    'sub_service_title'     => 'Threat Validation',
-                    'sub_service_sub_title' => 'Contextual enrichment and false positive reduction.',
+                    "sub_service_icon"      => "/uploads/services/icons/tag.png",
+                    'sub_service_title'     => 'Behavioral Analytics (UEBA)',
+                    'sub_service_sub_title' => 'We establish a baseline of normal user and entity behavior. Our AI engine instantly detects anomalies and risky deviations, uncovering insider threats and compromised accounts.',
                 ],
                 [
-                    "sub_service_icon"      => "/uploads/services/icons/4.png",
-                    'sub_service_title'     => 'Automated Response',
-                    'sub_service_sub_title' => 'AI triggers playbooks to contain the threat.',
-                ],
-                [
-                    "sub_service_icon"      => "/uploads/services/icons/5.png",
-                    'sub_service_title'     => 'Continuous Learning',
-                    'sub_service_sub_title' => 'Models retrain on new data to stay ahead.',
+                    "sub_service_icon"      => "/uploads/services/icons/guard.png",
+                    'sub_service_title'     => 'AI-Driven Security Operations',
+                    'sub_service_sub_title' => 'Enhance your SOC with AI. We automate alert triage, correlate disparate events into single incidents, and provide analysts with rich, contextual data to accelerate investigation.',
                 ],
             ] as $sub) {
                 $soc->subServices()->create($sub);
