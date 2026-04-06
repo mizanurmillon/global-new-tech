@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Web\backend\SecurityAssessment\SecurityAssessmentController;
+use App\Http\Controllers\Web\Backend\SecurityAssessment\SecurityAssessmentController;
 use App\Http\Controllers\Web\Backend\Service\ComprServicesController;
 use Illuminate\Support\Facades\Route;
 
