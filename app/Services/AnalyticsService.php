@@ -1,6 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Models\Blog;
+use App\Models\Brand;
+use App\Models\CoreService;
+use App\Models\SecurityAssessment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -10,10 +14,13 @@ class AnalyticsService
     // Dashboard metrics
     public function getDashboardMetrics()
     {
-        return Cache::remember('analytics:dashboard_metrics', 1800, function () {
+        return Cache::remember('analytics:dashboard_metrics', 300, function () {
             return [
-                'total_users' => User::count(),
-
+                'total_users'       => User::query()->team()->count(),
+                'total_brands'      => Brand::count(),
+                'total_blogs'       => Blog::count(),
+                'total_services'    => CoreService::count(),
+                'total_assessments' => SecurityAssessment::count(),
             ];
         });
     }
