@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('budget_range')->nullable();
             $table->text('message')->nullable();
             $table->string('status')->default('pending');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

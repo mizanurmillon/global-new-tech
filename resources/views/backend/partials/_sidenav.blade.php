@@ -30,6 +30,7 @@
                 </div>
             </a>
         </li>
+
         @if ($authUser->role === 'admin')
             <li>
                 <a href="/admin/team" aria-expanded="false" class="active">
@@ -42,6 +43,28 @@
                 </a>
             </li>
         @endif
+        <li class="">
+                <a href="/admin/leads" aria-expanded="false" class="active">
+                    <div class="nav_icon_small">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="nav_title">
+                        <span>Leads</span>
+                    </div>
+                </a>
+            </li>
+
+
+             <li class="">
+                <a href="/admin/tasks" aria-expanded="false" class="active">
+                    <div class="nav_icon_small">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div class="nav_title">
+                        <span>Tasks</span>
+                    </div>
+                </a>
+            </li>
 
         <li class="">
             <a href="/admin/brands" aria-expanded="false" class="active">

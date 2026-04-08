@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             ComprServiceSeeder::class,
             CoreServiceSeeder::class,
             SubServiceSeeder::class,
+            LeadSeeder::class,
 
         ]);
     }
