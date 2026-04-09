@@ -15,7 +15,7 @@ class LeadController extends Controller
         if (auth()->user()->role !== 'admin') {
             $query->where('assigned_to', auth()->id());
         }
-        // Search
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -26,28 +26,24 @@ class LeadController extends Controller
             });
         }
 
-        // Status filter
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Assignee filter
         if ($request->filled('assigned_to')) {
             $query->where('assigned_to', $request->assigned_to);
         }
 
-        $leads = $query->latest()->paginate(9);
-
-        // Stats
         $stats = [
-            'total'       => SecurityAssessment::count(),
-            'new'         => SecurityAssessment::where('status', 'pending')->count(),
-            'in_progress' => SecurityAssessment::whereIn('status', ['contacted', 'qualified', 'in_progress', 'proposal', 'negotiation'])->count(),
-            'closed_won'  => SecurityAssessment::where('status', 'closed_won')->count(),
+            'total'       => (clone $query)->count(),
+            'new'         => (clone $query)->where('status', 'new')->count(),
+            'in_progress' => (clone $query)->whereNotIn('status', ['new', 'closed_won'])->count(),
+            'closed_won'  => (clone $query)->where('status', 'closed_won')->count(),
         ];
 
-        $assignees = User::select('id', 'name')->get();
+        $leads = $query->latest()->paginate(9);
 
+        $assignees    = User::select('id', 'name')->get();
         $team_members = User::where('role', 'team')->get();
 
         return view('backend.layouts.leads.index', compact('leads', 'stats', 'assignees', 'team_members'));

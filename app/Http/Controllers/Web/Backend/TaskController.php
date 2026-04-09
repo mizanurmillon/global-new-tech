@@ -10,19 +10,24 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $tasks = Task::query()->where('user_id', auth()->id())->orWhere('assigned_to', auth()->id())
+        $query = Task::query()
+            ->where(function ($q) {
+                $q->where('user_id', auth()->id())
+                    ->orWhere('assigned_to', auth()->id());
+            })
             ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
             ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->when($request->priority, fn($q) => $q->where('priority', $request->priority))
-            ->when($request->assigned_to, fn($q) => $q->where('assigned_to', $request->assigned_to))
-            ->latest()->paginate(9);
+            ->when($request->assigned_to, fn($q) => $q->where('assigned_to', $request->assigned_to));
 
         $stats = [
-            'total'     => Task::count(),
-            'completed' => Task::where('status', 'done')->count(),
-            'overdue'   => Task::where('due_date', '<', today())->where('status', '!=', 'done')->count(),
-            'due_today' => Task::whereDate('due_date', today())->count(),
+            'total'     => (clone $query)->count(),
+            'completed' => (clone $query)->where('status', 'done')->count(),
+            'overdue'   => (clone $query)->where('due_date', '<', today())->where('status', '!=', 'done')->count(),
+            'due_today' => (clone $query)->whereDate('due_date', today())->count(),
         ];
+
+        $tasks = $query->latest()->paginate(9);
 
         $team_members = User::where('role', 'team')->get();
 
@@ -63,7 +68,7 @@ class TaskController extends Controller
             'assigned_to' => 'nullable|exists:users,id',
         ]);
 
-        if(auth()->user()->role != 'admin' && $task->user_id != auth()->id()) {
+        if (auth()->user()->role != 'admin' && $task->user_id != auth()->id()) {
             return back()->with('error', 'you can not assign this task');
         }
 

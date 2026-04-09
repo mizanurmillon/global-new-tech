@@ -127,7 +127,7 @@
                 </ul>
             </li>
 
-            <li class="">
+            <!-- <li class="">
                 <a href="/admin/security-assessment" aria-expanded="false" class="active">
                     <div class="nav_icon_small">
                         <i class="fa-solid fa-user-shield"></i>
@@ -136,7 +136,7 @@
                         <span>Security Assessment</span>
                     </div>
                 </a>
-            </li>
+            </li> -->
 
         @endif
 
