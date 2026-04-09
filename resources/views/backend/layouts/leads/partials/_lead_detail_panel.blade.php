@@ -65,6 +65,8 @@
                 <div id="p-score-bar" style="height:10px;border-radius:99px;width:0%;transition:width .5s ease;"></div>
             </div>
             <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                <small style="color:#ccc;font-size:10px;">Assigned</small>
+                <small style="color:#ccc;font-size:10px;">Accepted</small>
                 <small style="color:#ccc;font-size:10px;">New</small>
                 <small style="color:#ccc;font-size:10px;">Contacted</small>
                 <small style="color:#ccc;font-size:10px;">Qualified</small>
@@ -111,7 +113,7 @@
                 @csrf
                 @method('PATCH')
                 <select name="status" id="p-status-select" onchange="this.form.submit()" style="width:100%;padding:10px 14px;border:1.5px solid #dee2e6;border-radius:8px;font-size:14px;background:#fff;color:#222;cursor:pointer;appearance:auto;">
-                    @foreach(['new', 'contacted', 'qualified', 'proposal', 'negotiation', 'closed_won', 'closed_lost'] as $s)
+                    @foreach(['assigned', 'rejected', 'accepted', 'new', 'contacted', 'qualified', 'proposal', 'negotiation', 'closed_won', 'closed_lost'] as $s)
                         <option value="{{ $s }}">{{ ucfirst(str_replace('_', ' ', $s)) }}</option>
                     @endforeach
                 </select>

@@ -66,10 +66,13 @@
                 <div id="tp-progress-bar" style="height:10px;border-radius:99px;width:0%;transition:width .5s ease;"></div>
             </div>
             <div style="display:flex;justify-content:space-between;margin-top:6px;">
-                <small style="color:#ccc;font-size:10px;">Pending</small>
-                <small style="color:#ccc;font-size:10px;">In Progress</small>
-                <small style="color:#ccc;font-size:10px;">Review</small>
-                <small style="color:#ccc;font-size:10px;">Done</small>
+                    <small style="color:#ccc;font-size:10px;">Assigned</small>
+                    <small style="color:#ccc;font-size:10px;">Accepted</small>
+                    <small style="color:#ccc;font-size:10px;">Pending</small>
+                    <small style="color:#ccc;font-size:10px;">In Progress</small>
+                    <small style="color:#ccc;font-size:10px;">Review</small>
+                    <small style="color:#ccc;font-size:10px;">Done</small>
+               
             </div>
         </div>
 
@@ -92,7 +95,7 @@
                 @csrf
                 @method('PATCH')
                 <select name="status" onchange="this.form.submit()" style="width:100%;padding:10px 14px;border:1.5px solid #dee2e6;border-radius:8px;font-size:14px;background:#fff;color:#222;cursor:pointer;">
-                    @foreach(['pending','in_progress','review','done'] as $s)
+                    @foreach(['assigned','rejected','accepted','pending','in_progress','review','done'] as $s)
                         <option value="{{ $s }}">{{ ucfirst(str_replace('_',' ',$s)) }}</option>
                     @endforeach
                 </select>

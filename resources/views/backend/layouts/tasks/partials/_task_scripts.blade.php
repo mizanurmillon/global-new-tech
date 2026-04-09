@@ -64,6 +64,8 @@ function openTaskPanel(d) {
     badge.className   = 'task-badge badge-' + d.status;
 
     const statusProgress = {
+        'assigned':    { percent: 10,  color: '#3b82f6' },
+        'accepted':    { percent: 20,  color: '#06b6d4' },
         'pending':     { percent: 15,  color: '#3b82f6' },
         'in_progress': { percent: 50,  color: '#f59e0b' },
         'review':      { percent: 75,  color: '#8b5cf6' },
