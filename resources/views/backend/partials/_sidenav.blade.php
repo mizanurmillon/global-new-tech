@@ -1,15 +1,13 @@
 <!-- sidebar  -->
 @php
-    $authUser = auth()->user();
+$authUser = auth()->user();
 @endphp
 <nav id="sidebar" class="sidebar ">
     <!-- Logo  -->
     <div class="logo d-flex justify-content-center">
-        <a class="large_logo" href="{{ route('admin.dashboard') }}"><img
-                src="{{ asset($systemSetting->logo ?? 'backend/assets/img/logo.png') }} " alt="" /></a>
+        <a class="large_logo" href="{{ route('admin.dashboard') }}"><img src="{{ asset($systemSetting->logo ?? 'backend/assets/img/logo.png') }} " alt="" /></a>
         <a class="small_logo" href="{{ route('admin.dashboard') }}">
-            <img class="rounded-circle" src="{{ asset($systemSetting->favicon ?? 'backend/assets/img/mini-logo.png') }}"
-                alt="logo" style="object-fit: contain; height: 35px; width: 45px; margin-top: 5px;" />
+            <img class="rounded-circle" src="{{ asset($systemSetting->favicon ?? 'backend/assets/img/mini-logo.png') }}" alt="logo" style="object-fit: contain; height: 35px; width: 45px; margin-top: 5px;" />
         </a>
 
         <div class="sidebar_close_icon d-lg-none">
@@ -32,40 +30,42 @@
         </li>
 
         @if ($authUser->role === 'admin')
-            <li>
-                <a href="/admin/team" aria-expanded="false" class="active">
-                    <div class="nav_icon_small">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="nav_title">
-                        <span>Team Members</span>
-                    </div>
-                </a>
-            </li>
+        <li>
+            <a href="/admin/team" aria-expanded="false" class="active">
+                <div class="nav_icon_small">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Team Members</span>
+                </div>
+            </a>
+        </li>
         @endif
         <li class="">
-                <a href="/admin/leads" aria-expanded="false" class="active">
-                    <div class="nav_icon_small">
-                        <i class="fa-solid fa-user-shield"></i>
-                    </div>
-                    <div class="nav_title">
-                        <span>Leads</span>
-                    </div>
-                </a>
-            </li>
+            <a href="/admin/leads" aria-expanded="false" class="active">
+                <div class="nav_icon_small">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Leads</span>
+                </div>
+            </a>
+        </li>
 
 
-             <li class="">
-                <a href="/admin/tasks" aria-expanded="false" class="active">
-                    <div class="nav_icon_small">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div class="nav_title">
-                        <span>Tasks</span>
-                    </div>
-                </a>
-            </li>
+        <li class="">
+            <a href="/admin/tasks" aria-expanded="false" class="active">
+                <div class="nav_icon_small">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Tasks</span>
+                </div>
+            </a>
+        </li>
 
+
+        @if ($authUser->role === 'admin')
         <li class="">
             <a href="/admin/brands" aria-expanded="false" class="active">
                 <div class="nav_icon_small">
@@ -109,34 +109,34 @@
                 </div>
             </a>
         </li>
-        @if ($authUser->role === 'admin')
-            <li class="">
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                    </div>
-                    <div class="nav_title">
-                        <span>Services</span>
-                    </div>
-                </a>
-                <ul>
-                    <li> <a href="/admin/services">Core Services</a> </li>
-                    <li> <a href="/admin/sub-services">Sub Services</a> </li>
-                    <li> <a href="/admin/compr-services">Comp Services</a> </li>
 
-                </ul>
-            </li>
+        <li class="">
+            <a class="has-arrow" href="#" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                </div>
+                <div class="nav_title">
+                    <span>Services</span>
+                </div>
+            </a>
+            <ul>
+                <li> <a href="/admin/services">Core Services</a> </li>
+                <li> <a href="/admin/sub-services">Sub Services</a> </li>
+                <li> <a href="/admin/compr-services">Comp Services</a> </li>
 
-            <!-- <li class="">
-                <a href="/admin/security-assessment" aria-expanded="false" class="active">
-                    <div class="nav_icon_small">
-                        <i class="fa-solid fa-user-shield"></i>
-                    </div>
-                    <div class="nav_title">
-                        <span>Security Assessment</span>
-                    </div>
-                </a>
-            </li> -->
+            </ul>
+        </li>
+        <li class="">
+            <a href="/admin/cms-contents" aria-expanded="false" class="active">
+                <div class="nav_icon_small">
+                    <i class="fas fa-sticky-note"></i>
+                </div>
+                <div class="nav_title">
+                    <span>CMS</span>
+                </div>
+            </a>
+        </li>
+
 
         @endif
 
@@ -152,18 +152,7 @@
         </li> --}}
 
 
-        @if ($authUser->role === 'admin')
-            <li class="">
-                <a href="/admin/cms-contents" aria-expanded="false" class="active">
-                    <div class="nav_icon_small">
-                        <i class="fas fa-sticky-note"></i>
-                    </div>
-                    <div class="nav_title">
-                        <span>CMS</span>
-                    </div>
-                </a>
-            </li>
-        @endif
+
         <li class="">
             <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">

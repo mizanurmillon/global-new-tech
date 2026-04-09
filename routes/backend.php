@@ -29,23 +29,7 @@ Route::middleware(['team'])->group(function () {
     });
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::prefix('blogs')->name('admin.blogs.')->group(function () {
-        Route::resource('/', BlogController::class)->parameter('', 'blog');
-        Route::patch('/status/{blog}', [BlogController::class, 'status'])->name('status');
-    });
-
-    Route::resource('/testimonials', TestimonialController::class)->names('admin.testimonials');
-    Route::patch('/testimonials/{id}/status', [TestimonialController::class, 'status'])->name('admin.testimonials.status');
-
-    Route::prefix('brands')->name('admin.brands.')->group(function () {
-        Route::resource('/', BrandController::class)->parameter('', 'brand');
-        Route::patch('/status/{brand}', [BrandController::class, 'status'])->name('status');
-    });
-
-    Route::prefix('technologies')->name('admin.technologies.')->group(function () {
-        Route::resource('/', TechnologyController::class)->parameter('', 'technology');
-        Route::patch('/status/{technology}', [TechnologyController::class, 'status'])->name('status');
-    });
+   
 
      Route::resource('/leads', LeadController::class)->names('admin.leads');
     Route::post('leads/{lead}/assign', [LeadController::class, 'assign'])->name('admin.leads.assign');
@@ -77,6 +61,23 @@ Route::middleware(['admin'])->group(function () {
         Route::resource('/', SubServiceController::class)->parameter('', 'subService');
     });
 
+     Route::prefix('blogs')->name('admin.blogs.')->group(function () {
+        Route::resource('/', BlogController::class)->parameter('', 'blog');
+        Route::patch('/status/{blog}', [BlogController::class, 'status'])->name('status');
+    });
+
+    Route::resource('/testimonials', TestimonialController::class)->names('admin.testimonials');
+    Route::patch('/testimonials/{id}/status', [TestimonialController::class, 'status'])->name('admin.testimonials.status');
+
+    Route::prefix('brands')->name('admin.brands.')->group(function () {
+        Route::resource('/', BrandController::class)->parameter('', 'brand');
+        Route::patch('/status/{brand}', [BrandController::class, 'status'])->name('status');
+    });
+
+    Route::prefix('technologies')->name('admin.technologies.')->group(function () {
+        Route::resource('/', TechnologyController::class)->parameter('', 'technology');
+        Route::patch('/status/{technology}', [TechnologyController::class, 'status'])->name('status');
+    });
    
 
 });
