@@ -5071,6 +5071,7 @@ fieldset:disabled .btn {
     position: relative;
     flex: 1 1 auto;
     padding: 1rem;
+    pointer-events: auto;
 }
 .modal-footer {
     display: flex;
