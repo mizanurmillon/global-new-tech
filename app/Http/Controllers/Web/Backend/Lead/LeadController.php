@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Backend;
+namespace App\Http\Controllers\Web\Backend\Lead;
 
 use App\Http\Controllers\Controller;
 use App\Models\SecurityAssessment;
@@ -61,6 +61,7 @@ class LeadController extends Controller
 
         $lead->update([
             'assigned_to' => $request->assigned_to,
+            'status'      => 'assigned',
         ]);
 
         return redirect()->back()->with('success', 'Lead assigned successfully.');
@@ -68,10 +69,68 @@ class LeadController extends Controller
     // LeadController.php
     public function updateStatus(Request $request, SecurityAssessment $lead)
     {
+        $isAdmin    = auth()->user()->role === 'admin';
+        $isAssigned = auth()->user()->id === $lead->assigned_to;
+
+        if (! $isAdmin && ! $isAssigned) {
+            return back()->with('error', 'You cannot change the status of this lead.');
+        }
+
+        if ($lead->status === 'rejected' && ! $isAdmin) {
+            return back()->with('error', 'This lead is rejected. Please contact admin to reassign.');
+        }
+
+        $statusOrder = [
+            'new'         => 1,
+            'assigned'    => 2,
+            'accepted'    => 3,
+            'rejected'    => 3,
+            'contacted'   => 4,
+            'qualified'   => 5,
+            'proposal'    => 6,
+            'negotiation' => 7,
+            'closed_won'  => 8,
+            'closed_lost' => 8,
+        ];
+
+        $currentRank = $statusOrder[$lead->status] ?? 0;
+        $newRank     = $statusOrder[$request->status] ?? 0;
+
+        if ($newRank < $currentRank) {
+            return back()->with('error', 'You cannot move the status backwards.');
+        }
+
+        if ($request->status === 'rejected') {
+            $lead->update(['status' => 'rejected', 'assigned_to' => null]);
+            return back()->with('success', 'Lead rejected successfully.');
+        }
+
         $lead->update(['status' => $request->status]);
-        return back();
+
+        return back()->with('success', 'Status updated successfully.');
     }
 
+    public function accept(Request $request, SecurityAssessment $lead)
+    {
+        if (auth()->user()->id !== $lead->assigned_to) {
+            return back()->with('error', 'You cannot accept this lead.');
+        }
+
+        $lead->update(['status' => 'accepted']);
+
+        return back()->with('success', 'Lead accepted successfully.');
+    }
+
+    public function reject(Request $request, SecurityAssessment $lead)
+    {
+        if (auth()->user()->id !== $lead->assigned_to) {
+            return back()->with('error', 'You cannot reject this lead.');
+        }
+
+        $lead->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Lead rejected successfully.');
+    }
     public function saveNote(Request $request, SecurityAssessment $lead)
     {
 

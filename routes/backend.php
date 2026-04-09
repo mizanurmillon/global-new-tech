@@ -3,10 +3,10 @@
 use App\Http\Controllers\Web\Backend\Blog\BlogController;
 use App\Http\Controllers\Web\Backend\Brand\BrandController;
 use App\Http\Controllers\Web\Backend\Dashboard\DashboardController;
-use App\Http\Controllers\Web\Backend\LeadController;
+use App\Http\Controllers\Web\Backend\Lead\LeadController;
 use App\Http\Controllers\Web\Backend\Service\CoreServiceController;
 use App\Http\Controllers\Web\Backend\Service\SubServiceController;
-use App\Http\Controllers\Web\Backend\TaskController;
+use App\Http\Controllers\Web\Backend\Task\TaskController;
 use App\Http\Controllers\Web\Backend\Team\TeamMemberController;
 use App\Http\Controllers\Web\Backend\Technology\TechnologyController;
 use App\Http\Controllers\Web\Backend\Testimonial\TestimonialController;
@@ -47,12 +47,10 @@ Route::middleware(['team'])->group(function () {
         Route::patch('/status/{technology}', [TechnologyController::class, 'status'])->name('status');
     });
 
-     Route::resource('/leads', LeadController::class)->names('admin.leads');
+    Route::resource('/leads', LeadController::class)->names('admin.leads');
     Route::post('leads/{lead}/assign', [LeadController::class, 'assign'])->name('admin.leads.assign');
-    // routes/web.php
     Route::patch('/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('admin.leads.status');
     Route::post('/leads/{lead}/note', [LeadController::class, 'saveNote'])->name('admin.leads.note');
-    // routes/web.php
     Route::resource('tasks', TaskController::class)->names('admin.tasks');
 
     Route::post('/tasks/{task}/note', [TaskController::class, 'saveNote'])->name('admin.tasks.note');
@@ -76,7 +74,4 @@ Route::middleware(['admin'])->group(function () {
     Route::prefix('sub-services')->name('admin.sub-services.')->group(function () {
         Route::resource('/', SubServiceController::class)->parameter('', 'subService');
     });
-
-   
-
 });
