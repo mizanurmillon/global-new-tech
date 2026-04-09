@@ -12,6 +12,9 @@ class LeadController extends Controller
     {
         $query = SecurityAssessment::query()->with(['assignedTo', 'assignedBy']);
 
+        if (auth()->user()->role !== 'admin') {
+            $query->where('assigned_to', auth()->id());
+        }
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
@@ -47,7 +50,7 @@ class LeadController extends Controller
 
         $team_members = User::where('role', 'team')->get();
 
-        return view('backend.layouts.lead.index', compact('leads', 'stats', 'assignees', 'team_members'));
+        return view('backend.layouts.leads.index', compact('leads', 'stats', 'assignees', 'team_members'));
     }
 
     public function assign(Request $request, SecurityAssessment $lead)
@@ -55,6 +58,10 @@ class LeadController extends Controller
         $request->validate([
             'assigned_to' => 'required|exists:users,id',
         ]);
+
+        if (auth()->user()->role != 'admin') {
+            return back()->with('error', 'you can not assign this lead');
+        }
 
         $lead->update([
             'assigned_to' => $request->assigned_to,
@@ -71,6 +78,7 @@ class LeadController extends Controller
 
     public function saveNote(Request $request, SecurityAssessment $lead)
     {
+
         $lead->update(['note' => $request->note]);
         return response()->json(['success' => true]);
     }

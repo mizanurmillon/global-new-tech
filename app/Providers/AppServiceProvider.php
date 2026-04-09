@@ -5,6 +5,7 @@ use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,5 +31,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('is_active', function ($user) {
             return $user->is_active;
         });
+
+        Paginator::useBootstrap();
     }
 }

@@ -20,6 +20,7 @@ class SecurityAssessment extends Model
         'budget_range',
         'message',
         'status',
+        'note',
     ];
 
     protected $hidden = [

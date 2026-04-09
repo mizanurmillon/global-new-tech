@@ -9,25 +9,25 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     public function index(Request $request)
-{
-    $tasks = Task::query()
-        ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
-        ->when($request->status, fn($q) => $q->where('status', $request->status))
-        ->when($request->priority, fn($q) => $q->where('priority', $request->priority))
-        ->when($request->assigned_to, fn($q) => $q->where('assigned_to', $request->assigned_to))
-        ->latest()->paginate(12);
+    {
+        $tasks = Task::query()->where('user_id', auth()->id())->orWhere('assigned_to', auth()->id())
+            ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
+            ->when($request->status, fn($q) => $q->where('status', $request->status))
+            ->when($request->priority, fn($q) => $q->where('priority', $request->priority))
+            ->when($request->assigned_to, fn($q) => $q->where('assigned_to', $request->assigned_to))
+            ->latest()->paginate(9);
 
-    $stats = [
-        'total'     => Task::count(),
-        'completed' => Task::where('status', 'done')->count(),
-        'overdue'   => Task::where('due_date', '<', today())->where('status', '!=', 'done')->count(),
-        'due_today' => Task::whereDate('due_date', today())->count(),
-    ];
+        $stats = [
+            'total'     => Task::count(),
+            'completed' => Task::where('status', 'done')->count(),
+            'overdue'   => Task::where('due_date', '<', today())->where('status', '!=', 'done')->count(),
+            'due_today' => Task::whereDate('due_date', today())->count(),
+        ];
 
-    $team_members = User::where('role', 'team')->get();
+        $team_members = User::where('role', 'team')->get();
 
-    return view('backend.layouts.task.index', compact('tasks', 'stats', 'team_members'));
-}
+        return view('backend.layouts.tasks.index', compact('tasks', 'stats', 'team_members'));
+    }
     // TaskController.php
     public function store(Request $request)
     {
@@ -52,9 +52,26 @@ class TaskController extends Controller
     }
 
     public function updateStatus(Request $request, Task $task)
-{
-    $task->update(['status' => $request->status]);
-    return back();
-}
+    {
+        $task->update(['status' => $request->status]);
+        return back();
+    }
+
+    public function assign(Request $request, Task $task)
+    {
+        $request->validate([
+            'assigned_to' => 'nullable|exists:users,id',
+        ]);
+
+        if(auth()->user()->role != 'admin' && $task->user_id != auth()->id()) {
+            return back()->with('error', 'you can not assign this task');
+        }
+
+        $task->update([
+            'assigned_to' => $request->assigned_to ?: null,
+        ]);
+
+        return back()->with('success', 'Task assigned successfully.');
+    }
 
 }
