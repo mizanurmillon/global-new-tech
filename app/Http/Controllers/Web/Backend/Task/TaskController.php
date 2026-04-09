@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Backend;
+namespace App\Http\Controllers\Web\Backend\Task;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
@@ -47,10 +47,10 @@ class TaskController extends Controller
             'task_type'   => $request->task_type ?? 'general',
             'priority'    => $request->priority ?? 'medium',
             'due_date'    => $request->due_date,
-            'assigned_to' => $request->assigned_to,
+            'assigned_to' => $request->assigned_to ?: null,
             'skills'      => $request->skills ? json_decode($request->skills) : null,
             'note'        => $request->note,
-            'status'      => 'pending',
+            'status'      => $request->assigned_to ? 'assigned' : 'pending',
         ]);
 
         return redirect()->route('admin.tasks.index')->with('success', 'Task created successfully!');
@@ -58,8 +58,34 @@ class TaskController extends Controller
 
     public function updateStatus(Request $request, Task $task)
     {
+        if (auth()->user()->id !== $task->assigned_to && auth()->user()->role !== 'admin') {
+            return back()->with('error', 'You cannot change the status of this task.');
+        }
+
+        if($task->status == 'rejected' && auth()->user()->id == $task->assigned_to) {
+            return back()->with('error', 'You cannot change the status of a rejected task. Please contact admin.');
+        }
+
+        $statusOrder = [
+            'pending'     => 1,
+            'assigned'    => 2,
+            'accepted'    => 3,
+            'rejected'    => 3,
+            'in_progress' => 4,
+            'review'      => 5,
+            'done'        => 6,
+        ];
+
+        $currentRank = $statusOrder[$task->status] ?? 0;
+        $newRank     = $statusOrder[$request->status] ?? 0;
+
+        if ($newRank < $currentRank) {
+            return back()->with('error', 'You cannot move the status backwards.');
+        }
+
         $task->update(['status' => $request->status]);
-        return back();
+
+        return back()->with('success', 'Status updated successfully.');
     }
 
     public function assign(Request $request, Task $task)
@@ -70,6 +96,12 @@ class TaskController extends Controller
 
         if (auth()->user()->role != 'admin' && $task->user_id != auth()->id()) {
             return back()->with('error', 'you can not assign this task');
+        }
+
+        if($task->status == 'pending' && $request->assigned_to) {
+            $task->status = 'assigned';
+        } elseif(!$request->assigned_to) {
+            $task->status = 'pending';
         }
 
         $task->update([

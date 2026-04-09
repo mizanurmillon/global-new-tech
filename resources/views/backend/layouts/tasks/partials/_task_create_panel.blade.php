@@ -57,7 +57,6 @@
             <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                     <label style="font-size:13px;font-weight:600;color:#222;">Description</label>
-                    <span style="font-size:12px;color:#6b7280;">✦ AI Improve</span>
                 </div>
                 <textarea name="description" rows="4" placeholder="Describe the task in detail..."
                     style="width:100%;padding:10px 14px;border:1.5px solid #e2e5ea;border-radius:8px;font-size:14px;color:#222;background:#fff;box-sizing:border-box;resize:vertical;font-family:inherit;outline:none;"
@@ -68,7 +67,6 @@
             <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                     <label style="font-size:13px;font-weight:600;color:#222;">Priority & Due Date</label>
-                    <span style="font-size:12px;color:#6b7280;">✦ AI Suggest</span>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <select name="priority"
@@ -91,7 +89,7 @@
                 <select name="assigned_to"
                     style="width:100%;padding:10px 14px;border:1.5px solid #e2e5ea;border-radius:8px;font-size:14px;color:#222;background:#fff;outline:none;cursor:pointer;"
                     onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#e2e5ea'">
-                    <option value="">Auto-assign with AI</option>
+                    <option value="">Select a team member</option>
                     @foreach($team_members as $member)
                         <option value="{{ $member->id }}">{{ $member->name }}</option>
                     @endforeach
@@ -102,7 +100,6 @@
             <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                     <label style="font-size:13px;font-weight:600;color:#222;">Required Skills / Tags</label>
-                    <span style="font-size:12px;color:#6b7280;">✦ AI Suggest</span>
                 </div>
                 <div id="createTagsContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;min-height:4px;"></div>
                 <input type="hidden" name="skills" id="createSkillsHidden">
